@@ -15,10 +15,11 @@ html, body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ── Safe Area Insets (Notch, Dynamic Island, Gesture Bar) ── */
+/* ── Safe Area Insets (Notch, Dynamic Island, Gesture Bar) ──
+ * Nur horizontale Safe Areas auf body - vertikale werden von
+ * Standalone-Modus (padding-top) und Nav/Seiten (padding-bottom) gehandhabt.
+ * Kein body padding-top/bottom hier, sonst doppelt mit Seiten-Berechnungen. */
 body {
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
 }
@@ -60,5 +61,10 @@ nav,
 @media (display-mode: standalone) {
   body {
     padding-top: env(safe-area-inset-top);
+  }
+
+  /* Kein Scroll-Bleed - Content bleibt in seinem Container */
+  .app-content {
+    overscroll-behavior-y: contain;
   }
 }

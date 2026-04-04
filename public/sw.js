@@ -12,9 +12,9 @@
  *   API: Immer Netzwerk (kein Caching von Nutzerdaten)
  */
 
-const SHELL_CACHE   = 'oikos-shell-v22';
-const PAGES_CACHE   = 'oikos-pages-v22';
-const ASSETS_CACHE  = 'oikos-assets-v22';
+const SHELL_CACHE   = 'oikos-shell-v23';
+const PAGES_CACHE   = 'oikos-pages-v23';
+const ASSETS_CACHE  = 'oikos-assets-v23';
 const ALL_CACHES    = [SHELL_CACHE, PAGES_CACHE, ASSETS_CACHE];
 
 // App-Shell: sofort benötigt für ersten Render

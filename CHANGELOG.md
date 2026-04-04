@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.2] - 2026-04-04
+
+### Fixed
+- Fix UI overlap and scroll bleed on iOS PWA - remove double safe-area padding from body that caused content to shift under status bar (#16)
+- Fix page containers using wrong nav height token (56px instead of 68px including dot indicator), causing content to render behind bottom nav on all pages
+- Add `overflow: hidden` to all fixed-height page containers (shopping, meals, notes, budget, contacts) to prevent scroll bleed
+- Add `overscroll-behavior-y: contain` to app-content to prevent rubber-banding scroll propagation
+- Fix FAB position on all pages to account for full bottom nav height including dot indicator
+- Bump service worker cache version to v23
+
 ## [0.8.1] - 2026-04-04
 
 ### Fixed

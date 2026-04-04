@@ -97,6 +97,7 @@
   flex: 1;
   padding-bottom: calc(var(--nav-bottom-height) + var(--safe-area-inset-bottom));
   overflow-y: auto;
+  overscroll-behavior-y: contain;
 }
 
 /* Sidebar auf Mobile verstecken */
@@ -217,7 +218,7 @@
  * -------------------------------------------------------- */
 .page-fab {
   position: fixed;
-  bottom: calc(var(--nav-height-mobile) + 24px + var(--safe-area-inset-bottom));
+  bottom: calc(var(--nav-bottom-height) + 24px + var(--safe-area-inset-bottom));
   right: var(--space-4);
   width: 52px;
   height: 52px;
@@ -865,7 +866,7 @@
 /* FAB (Floating Action Button) */
 .fab {
   position: fixed;
-  bottom: calc(var(--nav-height-mobile) + var(--safe-area-inset-bottom) + var(--space-4));
+  bottom: calc(var(--nav-bottom-height) + var(--safe-area-inset-bottom) + var(--space-4));
   right: var(--space-4);
   width: 52px;
   height: 52px;
