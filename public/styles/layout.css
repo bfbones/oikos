@@ -1034,7 +1034,7 @@
   height: 20px;
   background: #fff;
   border-radius: var(--radius-full);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.2s var(--ease-out);
 }
 
@@ -1540,8 +1540,8 @@
 
   a[href]::after {
     content: " (" attr(href) ")";
-    font-size: 0.85em;
-    color: #666;
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
   }
 
   .nav-item,

@@ -311,7 +311,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 9px;
+  font-size: var(--text-xs);
   font-weight: var(--font-weight-bold);
   color: #ffffff;
   flex-shrink: 0;
@@ -805,7 +805,7 @@
   }
 
   .weather-widget__temp {
-    font-size: 2.5rem;
+    font-size: var(--text-4xl);
   }
 
   .weather-widget__icon {
