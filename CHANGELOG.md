@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.4] - 2026-04-05
+
+### Fixed
+- Shopping list category dropdown now shows translated labels instead of hardcoded German strings (#21)
+- Recurrence fields in task and calendar modals now fully translated (labels, frequency options, weekday abbreviations, unit labels) (#21)
+
 ## [0.11.3] - 2026-04-05
 
 ### Added

@@ -155,9 +155,7 @@ function renderListContent(container) {
           <div class="autocomplete-dropdown" id="autocomplete-dropdown" hidden></div>
         </div>
         <select class="quick-add__cat" id="item-cat-select" aria-label="${t('shopping.categoryLabel')}">
-          ${ITEM_CATEGORIES.map((c) =>
-            `<option value="${c}">${c}</option>`
-          ).join('')}
+          ${(() => { const labels = CATEGORY_LABELS(); return ITEM_CATEGORIES.map((c) => `<option value="${c}">${labels[c] || c}</option>`).join(''); })()}
         </select>
         <button class="quick-add__btn" type="submit" aria-label="${t('shopping.addItemLabel')}">
           <i data-lucide="plus" style="width:20px;height:20px" aria-hidden="true"></i>

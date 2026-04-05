@@ -552,5 +552,29 @@
 
   "modal": {
     "closeLabel": "Schließen"
+  },
+
+  "rrule": {
+    "freqNone": "Keine Wiederholung",
+    "freqDaily": "Täglich",
+    "freqWeekly": "Wöchentlich",
+    "freqMonthly": "Monatlich",
+    "dayMo": "Mo",
+    "dayTu": "Di",
+    "dayWe": "Mi",
+    "dayTh": "Do",
+    "dayFr": "Fr",
+    "daySa": "Sa",
+    "daySu": "So",
+    "labelRepeat": "Wiederholung",
+    "labelEvery": "Alle",
+    "labelOnDays": "An diesen Tagen",
+    "labelUntil": "Endet am (optional)",
+    "unitDay": "Tag",
+    "unitDays": "Tage",
+    "unitWeek": "Woche",
+    "unitWeeks": "Wochen",
+    "unitMonth": "Monat",
+    "unitMonths": "Monate"
   }
 }
