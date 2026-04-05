@@ -10,6 +10,27 @@ import assert from 'node:assert/strict';
 // /i18n.js wird durch test-browser-loader.mjs gemockt (--loader Flag)
 const { wireBlurValidation, btnSuccess, btnError } = await import('./public/components/modal.js');
 
+// window.matchMedia und document.createElementNS werden von btnSuccess/btnError benötigt
+global.window = { matchMedia: () => ({ matches: false }) };
+
+const _makeSvgEl = (tag) => {
+  const attrs = {};
+  const children = [];
+  return {
+    tag,
+    setAttribute(k, v) { attrs[k] = v; },
+    appendChild(child) { children.push(child); },
+    get outerHTML() {
+      const attrStr = Object.entries(attrs).map(([k, v]) => ` ${k}="${v}"`).join('');
+      const inner = children.map(c => c.outerHTML ?? '').join('');
+      return `<${tag}${attrStr}>${inner}</${tag}>`;
+    },
+    _attrs: attrs,
+    _children: children,
+  };
+};
+global.document = { createElementNS: (_ns, tag) => _makeSvgEl(tag) };
+
 const _origSetTimeout = setTimeout;
 
 // --------------------------------------------------------
@@ -53,15 +74,19 @@ function makeContainer(inputs = []) {
 function makeBtn({ textContent = 'Speichern' } = {}) {
   const classes = new Set();
   const listeners = {};
+  let _children = [];
   return {
     textContent,
-    innerHTML: '',
+    get innerHTML() {
+      return _children.map(c => c?.outerHTML ?? '').join('');
+    },
     offsetWidth: 0,
     classList: {
       add(cls) { classes.add(cls); },
       remove(cls) { classes.delete(cls); },
       contains(cls) { return classes.has(cls); },
     },
+    replaceChildren(...nodes) { _children = nodes; },
     addEventListener(event, fn) { listeners[event] = fn; },
     _classes: classes,
     _listeners: listeners,
