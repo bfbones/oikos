@@ -69,51 +69,83 @@ git --version              # git version 2.x.x
 
 ## Step-by-Step Installation
 
-### 1. Clone the Repository
+There are two ways to get Oikos running. **Option A** (pre-built image) is recommended for most users — no clone required. **Option B** (build from source) is for contributors or if you want to run a custom version.
 
-Download the Oikos source code to your machine:
+---
+
+### Option A — Pre-built Image (Recommended)
+
+A ready-to-use Docker image is published to the GitHub Container Registry on every release. You only need two files.
+
+#### 1. Download the Compose File and Example Config
+
+```bash
+curl -O https://raw.githubusercontent.com/ulsklyc/oikos/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/ulsklyc/oikos/main/.env.example
+```
+
+#### 2. Configure Environment Variables
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and set at minimum the two required secrets:
+
+```bash
+SESSION_SECRET=<YOUR-SECRET>
+DB_ENCRYPTION_KEY=<YOUR-SECRET>
+```
+
+Generate a secure value for each:
+
+```bash
+openssl rand -hex 32
+```
+
+Run this command **twice** and paste each result. See [Environment Variables](#environment-variables) for all options.
+
+#### 3. Start the Container
+
+```bash
+docker compose up -d
+```
+
+Docker pulls `ghcr.io/ulsklyc/oikos:latest` automatically. No build step, no Node.js installation needed.
+
+Continue with [Step 4 — Verify](#4-verify-the-container-is-running).
+
+---
+
+### Option B — Build from Source
+
+#### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/ulsklyc/oikos.git
 cd oikos
 ```
 
-### 2. Configure Environment Variables
-
-Copy the example environment file and edit it with your own values:
+#### 2. Configure Environment Variables
 
 ```bash
 cp .env.example .env
 ```
 
-Open `.env` in a text editor and change at least the two secret values - see the [Environment Variables](#environment-variables) section for full details. The critical ones:
+Open `.env` and set the two required secrets (see above). Generate them with `openssl rand -hex 32`.
 
-```bash
-# Generate secure values for these:
-SESSION_SECRET=<YOUR-SECRET>
-DB_ENCRYPTION_KEY=<YOUR-SECRET>
-```
-
-Generate a secure random string:
-
-```bash
-openssl rand -hex 32
-```
-
-Run this command **twice** - once for `SESSION_SECRET` and once for `DB_ENCRYPTION_KEY`. Paste each result into your `.env` file.
-
-### 3. Build and Start the Container
+#### 3. Build and Start the Container
 
 ```bash
 docker compose up -d --build
 ```
 
-- `--build` builds the Docker image from the Dockerfile (compiles SQLCipher dependencies, installs npm packages).
-- `-d` runs the container in the background (detached mode).
+- `--build` compiles the Docker image locally (SQLCipher dependencies, npm packages).
+- `-d` runs the container in the background.
 
 The first build takes a few minutes. Subsequent starts are much faster.
 
-### 4. Verify the Container is Running
+### 4. Verify the Container is Running <a name="4-verify-the-container-is-running"></a>
 
 Check the logs to confirm a successful start:
 
@@ -305,7 +337,18 @@ docker compose up -d
 
 ## Updates
 
-### Standard Update
+### Option A — Pre-built Image
+
+Pull the latest published image and restart:
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+No rebuild needed. The database volume persists across updates.
+
+### Option B — Build from Source
 
 ```bash
 cd oikos
@@ -313,13 +356,17 @@ git pull
 docker compose up -d --build
 ```
 
-This pulls the latest code, rebuilds the image with any new dependencies, and restarts the container. The database volume persists across rebuilds.
-
 ### When to Stop First
 
 If the [CHANGELOG](../CHANGELOG.md) mentions database migrations or breaking changes, stop the container before updating:
 
 ```bash
+# Option A (pre-built)
+docker compose pull
+docker compose down
+docker compose up -d
+
+# Option B (build from source)
 docker compose down
 git pull
 docker compose up -d --build
@@ -446,6 +493,8 @@ If you have existing data, you need the original encryption key. There is no way
 
 <details>
 <summary>SQLCipher build fails during Docker build</summary>
+
+> **Tip**: If you hit build issues, switch to the pre-built image (Option A above) — it ships with SQLCipher already compiled and requires no local build step.
 
 The Dockerfile installs these build dependencies: `python3`, `make`, `g++`, `libsqlcipher-dev`. If the build fails, ensure your Docker installation is up to date and has internet access to pull packages.
 

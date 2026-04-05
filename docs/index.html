@@ -593,7 +593,7 @@
         <div class="feature-card reveal">
           <div class="feature-icon" aria-hidden="true">&#x1F4CB;</div>
           <h3 data-i18n="feat_tasks_title">Task Management</h3>
-          <p data-i18n="feat_tasks_desc">Shared tasks with deadlines, priorities, subtasks, recurring schedules, and a Kanban board view.</p>
+          <p data-i18n="feat_tasks_desc">Shared tasks with deadlines, priorities, subtasks, recurring schedules, and a Kanban board with one-tap status buttons.</p>
         </div>
         <div class="feature-card reveal reveal-delay-1">
           <div class="feature-icon" aria-hidden="true">&#x1F6D2;</div>
@@ -613,7 +613,7 @@
         <div class="feature-card reveal">
           <div class="feature-icon" aria-hidden="true">&#x1F4B0;</div>
           <h3 data-i18n="feat_budget_title">Budget Tracking</h3>
-          <p data-i18n="feat_budget_desc">Track income and expenses, manage recurring entries, view monthly trends, and export to CSV.</p>
+          <p data-i18n="feat_budget_desc">Track income and expenses, configurable currency (13 options), recurring entries, monthly trends, and CSV export.</p>
         </div>
         <div class="feature-card reveal reveal-delay-1">
           <div class="feature-icon" aria-hidden="true">&#x1F4CC;</div>
@@ -737,12 +737,11 @@
       </div>
       <div class="setup-content reveal">
         <div class="code-block" role="region" aria-label="Setup commands">
-<span class="comment"># Clone and configure</span>
-git clone https://github.com/ulsklyc/oikos.git && cd oikos
+<span class="comment"># Option A — pre-built image (no clone required)</span>
+curl -O https://raw.githubusercontent.com/ulsklyc/oikos/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/ulsklyc/oikos/main/.env.example
 cp .env.example .env     <span class="comment"># set SESSION_SECRET and DB_ENCRYPTION_KEY</span>
-
-<span class="comment"># Start with Docker</span>
-<span class="cmd">docker compose up -d --build</span>
+<span class="cmd">docker compose up -d</span>
 <span class="cmd">docker compose exec oikos node setup.js</span>
         </div>
         <p class="setup-note" data-i18n="setup_note">Then open <code>http://localhost:3000</code> and log in. Need help? The <a href="https://github.com/ulsklyc/oikos/blob/main/docs/installation.md" target="_blank" rel="noopener">Installation Guide</a> covers everything from installing Docker to HTTPS, backups, and troubleshooting.</p>
@@ -779,7 +778,7 @@ cp .env.example .env     <span class="comment"># set SESSION_SECRET and DB_ENCRY
           features_title: 'Everything your household needs',
           features_desc: 'A complete set of tools designed for families, built to work together seamlessly.',
           feat_tasks_title: 'Task Management',
-          feat_tasks_desc: 'Shared tasks with deadlines, priorities, subtasks, recurring schedules, and a Kanban board view.',
+          feat_tasks_desc: 'Shared tasks with deadlines, priorities, subtasks, recurring schedules, and a Kanban board with one-tap status buttons.',
           feat_shopping_title: 'Shopping Lists',
           feat_shopping_desc: 'Collaborative lists with aisle categories and one-click import from your meal plans.',
           feat_meals_title: 'Meal Planning',
@@ -787,7 +786,7 @@ cp .env.example .env     <span class="comment"># set SESSION_SECRET and DB_ENCRY
           feat_calendar_title: 'Calendar Sync',
           feat_calendar_desc: 'Two-way sync with Google Calendar (OAuth) and Apple iCloud (CalDAV). All events in one place.',
           feat_budget_title: 'Budget Tracking',
-          feat_budget_desc: 'Track income and expenses, manage recurring entries, view monthly trends, and export to CSV.',
+          feat_budget_desc: 'Track income and expenses, configurable currency (13 options), recurring entries, monthly trends, and CSV export.',
           feat_notes_title: 'Notes',
           feat_notes_desc: 'Colored sticky notes with Markdown support. Perfect for family memos, recipes, and quick reminders.',
           feat_contacts_title: 'Contacts',
@@ -810,7 +809,7 @@ cp .env.example .env     <span class="comment"># set SESSION_SECRET and DB_ENCRY
           phil_open_desc: 'MIT licensed. Inspect, modify, extend, contribute. Built in the open for families who care about transparency.',
           setup_label: 'Get Started',
           setup_title: 'Up and running in minutes',
-          setup_note: 'Then open <code>http://localhost:3000</code> and log in. Need help? The <a href="https://github.com/ulsklyc/oikos/blob/main/docs/installation.md" target="_blank" rel="noopener">Installation Guide</a> covers everything from installing Docker to HTTPS, backups, and troubleshooting.',
+          setup_note: 'Then open <code>http://localhost:3000</code> and log in. Want to build from source or set up HTTPS? The <a href="https://github.com/ulsklyc/oikos/blob/main/docs/installation.md" target="_blank" rel="noopener">Installation Guide</a> covers all options.',
           footer_heart: 'Built with care for families who value privacy and simplicity.',
           footer_contrib: 'Contributing'
         },
@@ -825,7 +824,7 @@ cp .env.example .env     <span class="comment"># set SESSION_SECRET and DB_ENCRY
           features_title: 'Alles, was euer Haushalt braucht',
           features_desc: 'Ein vollst\u00e4ndiges Werkzeugset f\u00fcr Familien \u2014 nahtlos aufeinander abgestimmt.',
           feat_tasks_title: 'Aufgabenverwaltung',
-          feat_tasks_desc: 'Gemeinsame Aufgaben mit Fristen, Priorit\u00e4ten, Unteraufgaben, wiederkehrenden Terminen und Kanban-Ansicht.',
+          feat_tasks_desc: 'Gemeinsame Aufgaben mit Fristen, Priorit\u00e4ten, Unteraufgaben, wiederkehrenden Terminen und Kanban-Board mit Ein-Tipp-Status-Buttons.',
           feat_shopping_title: 'Einkaufslisten',
           feat_shopping_desc: 'Gemeinsame Listen mit Gang-Kategorien und Ein-Klick-Import aus Mahlzeitenpl\u00e4nen.',
           feat_meals_title: 'Mahlzeitenplanung',
@@ -833,7 +832,7 @@ cp .env.example .env     <span class="comment"># set SESSION_SECRET and DB_ENCRY
           feat_calendar_title: 'Kalender-Sync',
           feat_calendar_desc: 'Zwei-Wege-Sync mit Google Calendar (OAuth) und Apple iCloud (CalDAV). Alle Termine an einem Ort.',
           feat_budget_title: 'Budgetverwaltung',
-          feat_budget_desc: 'Einnahmen und Ausgaben verfolgen, wiederkehrende Eintr\u00e4ge verwalten, monatliche Trends und CSV-Export.',
+          feat_budget_desc: 'Einnahmen und Ausgaben verfolgen, konfigurierbare W\u00e4hrung (13 Optionen), wiederkehrende Eintr\u00e4ge, monatliche Trends und CSV-Export.',
           feat_notes_title: 'Notizen',
           feat_notes_desc: 'Farbige Haftnotizen mit Markdown. Perfekt f\u00fcr Familien-Memos, Rezepte und schnelle Erinnerungen.',
           feat_contacts_title: 'Kontakte',
@@ -856,7 +855,7 @@ cp .env.example .env     <span class="comment"># set SESSION_SECRET and DB_ENCRY
           phil_open_desc: 'MIT-lizenziert. Einsehen, anpassen, erweitern, beitragen. Offen gebaut f\u00fcr Familien, die Transparenz sch\u00e4tzen.',
           setup_label: 'Loslegen',
           setup_title: 'In Minuten einsatzbereit',
-          setup_note: 'Dann <code>http://localhost:3000</code> \u00f6ffnen und einloggen. Hilfe n\u00f6tig? Die <a href="https://github.com/ulsklyc/oikos/blob/main/docs/installation.md" target="_blank" rel="noopener">Installationsanleitung</a> erkl\u00e4rt alles \u2014 von Docker-Installation bis HTTPS, Backups und Fehlersuche.',
+          setup_note: 'Dann <code>http://localhost:3000</code> \u00f6ffnen und einloggen. Build aus dem Quellcode oder HTTPS einrichten? Die <a href="https://github.com/ulsklyc/oikos/blob/main/docs/installation.md" target="_blank" rel="noopener">Installationsanleitung</a> erkl\u00e4rt alle Optionen.',
           footer_heart: 'Mit Sorgfalt gebaut f\u00fcr Familien, die Privatsph\u00e4re und Einfachheit sch\u00e4tzen.',
           footer_contrib: 'Mitmachen'
         }

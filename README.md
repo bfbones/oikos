@@ -6,7 +6,7 @@
 
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="MIT License"></a>
   <a href="https://github.com/ulsklyc/oikos/releases"><img src="https://img.shields.io/github/v/release/ulsklyc/oikos?style=flat-square&color=007AFF&label=release" alt="Latest Release"></a>
-  <a href="https://www.docker.com"><img src="https://img.shields.io/badge/docker-ready-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker"></a>
+  <a href="https://github.com/ulsklyc/oikos/pkgs/container/oikos"><img src="https://img.shields.io/badge/ghcr.io-oikos-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker Image"></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/badge/node-%E2%89%A522-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js"></a>
   <a href="https://github.com/ulsklyc/oikos/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square" alt="PRs Welcome"></a>
 </div>
@@ -43,7 +43,7 @@
 
 ## Highlights
 
-**Task Management:** Shared tasks with deadlines, priorities, subtasks, recurring schedules, and Kanban view
+**Task Management:** Shared tasks with deadlines, priorities, subtasks, recurring schedules, Kanban view with one-tap status buttons for touch devices
 
 **Shopping Lists:** Collaborative lists with aisle categories and one-click import from meal plans
 
@@ -51,7 +51,7 @@
 
 **Calendar Sync:** Two-way sync with Google Calendar (OAuth) and Apple iCloud (CalDAV)
 
-**Budget Tracking:** Income and expenses, recurring entries, monthly trends, CSV export
+**Budget Tracking:** Income and expenses, recurring entries, configurable currency (13 currencies), monthly trends, CSV export
 
 **Notes & Contacts:** Colored sticky notes with Markdown, contact directory with vCard import/export
 
