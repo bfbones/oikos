@@ -99,6 +99,31 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* ── Schmale Viewports (< 580px): Views in zweite Zeile ── */
+@media (max-width: 579px) {
+  .cal-toolbar {
+    flex-wrap: wrap;
+    row-gap: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+
+  /* Nächste-Nav ans Ende der ersten Zeile bringen */
+  .cal-toolbar > .cal-toolbar__nav:last-child {
+    order: 4;
+  }
+
+  /* Views in volle zweite Zeile */
+  .cal-toolbar__views {
+    order: 10;
+    flex-basis: 100%;
+    justify-content: center;
+  }
+
+  .cal-toolbar__view-btn {
+    flex: 1;
+  }
+}
+
 /* --------------------------------------------------------
  * Monatsansicht
  * -------------------------------------------------------- */
