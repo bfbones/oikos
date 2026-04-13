@@ -267,6 +267,8 @@ User management and app configuration. Logged-in users only.
 
 ### Colors (CSS Custom Properties)
 
+Source of truth: `public/styles/tokens.css`. Key values:
+
 ```css
 :root {
   --color-bg: #F5F5F7;
@@ -274,34 +276,31 @@ User management and app configuration. Logged-in users only.
   --color-border: #E5E5EA;
   --color-text-primary: #1C1C1E;
   --color-text-secondary: #8E8E93;
-  --color-accent: #007AFF;
-  --color-accent-light: #E3F2FF;
-  --color-success: #34C759;
-  --color-warning: #FF9500;
-  --color-danger: #FF3B30;
-  --color-info: #5AC8FA;
-  --color-priority-none: var(--neutral-400);
-  --color-priority-low: #8E8E93;
-  --color-priority-medium: #FF9500;
-  --color-priority-high: #FF6B35;
-  --color-priority-urgent: #FF3B30;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
-  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'SF Mono', 'Fira Code', monospace;
+  --color-text-tertiary: #6B6B68;      /* WCAG AA on --color-bg */
+  --color-accent: #2563EB;
+  --color-accent-deep: #1E5CB3;
+  --color-accent-light: #EEF2FF;
+  --color-success: #16A34A;
+  --color-warning: #D97706;
+  --color-danger: #DC2626;
+  --color-info: #0969DA;               /* WCAG AA on white */
+  /* Glass layer tokens (Section 16): */
+  --glass-bg: rgba(255,255,255,0.72);
+  --glass-border: rgba(255,255,255,0.55);
+  --blur-md: 16px;
+  --radius-glass-button: 9999px;       /* capsule */
+  --ease-glass: cubic-bezier(0.34, 1.56, 0.64, 1); /* spring */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #1C1C1E;
-    --color-surface: #2C2C2E;
-    --color-border: #3A3A3C;
-    --color-text-primary: #F5F5F7;
-    --color-text-secondary: #8E8E93;
+    --color-bg: #111110;
+    --color-surface: #1C1C1A;
+    --color-border: #2C2C2A;
+    --color-text-primary: #F5F5F3;
+    --color-text-secondary: #8E8E8C;
+    --glass-bg: rgba(28,28,26,0.75);
+    --glass-border: rgba(255,255,255,0.12);
   }
 }
 ```
@@ -311,18 +310,30 @@ User management and app configuration. Logged-in users only.
 - Body: 16px mobile, 15px desktop, line-height 1.5
 - Caption: 13px, `var(--color-text-secondary)`
 
+### Glass Layer (`public/styles/glass.css`)
+
+Additive CSS file loaded globally after `layout.css`. Implements a Liquid Glass design language:
+
+- **Translucent surfaces:** `backdrop-filter: blur()` on bottom nav, sidebar, modal overlay, cards on hover. All blur effects are inside `@supports (backdrop-filter: blur(1px))` for progressive enhancement.
+- **Glass tokens:** Section 16 of `tokens.css` defines `--glass-bg*`, `--glass-border*`, `--blur-xs` through `--blur-xl`, `--opacity-glass-*`, `--glass-highlight*`, `--glass-shadow-sm/md/lg`, `--radius-glass-card/inner/chip/button`, `--ease-glass`, `--transition-glass`. Full dark mode overrides.
+- **Capsule shapes:** Buttons, FAB, and search inputs use `--radius-glass-button` (pill shape).
+- **Spring animations:** Modal entrance (`glass-modal-scale-in` / `glass-sheet-in`), page transitions, and list stagger all use `cubic-bezier(0.34, 1.56, 0.64, 1)` spring easing.
+- **FAB attention pulse:** `fab-ring-pulse` keyframe expands a ring around the FAB to signal readiness.
+- **Nav auto-hide:** Bottom bar hides on scroll-down, reappears on scroll-up (mobile only, < 1024px, 4 px hysteresis). CSS: `.nav-bottom--hidden { transform: translateY(calc(100% + var(--safe-area-inset-bottom))); }`. JS: `initNavHideOnScroll()` in `router.js`.
+- **Accessibility:** `prefers-reduced-transparency`, `prefers-reduced-motion`, and `prefers-contrast: more` blocks deactivate blur/animation and restore solid fallbacks.
+
 ### Components
 - **Cards:** `var(--color-surface)`, `var(--radius-md)`, `var(--shadow-sm)`. Consistent padding `var(--space-4)` (16px) across all modules.
-- **Buttons:** Primary = accent + white. Secondary = outline. Min-height 44px. Submit buttons show success (checkmark, 700ms green via `.btn--success`) and error (shake via `.btn--shaking`).
-- **Inputs:** `var(--radius-sm)`, 1.5px border, padding 12px 16px. `[required]` fields receive validation status on blur (`.form-field--error` / `.form-field--valid`). Enter moves focus to the next field; Enter on the last field triggers submit.
-- **FAB (Floating Action Button):** Color follows the module accent token (`--module-accent`) - each module defines its own accent color. Hidden when the virtual keyboard is open (`visualViewport.resize`, threshold 75% of window height).
+- **Buttons:** Primary = accent + white. Secondary = outline. Min-height 44px. Capsule shape via `--radius-glass-button`. Submit buttons show success (checkmark, 700ms green via `.btn--success`) and error (shake via `.btn--shaking`).
+- **Inputs:** `var(--radius-sm)`, 1.5px border, padding 12px 16px. Search inputs use `--radius-glass-button` and `--glass-border-subtle`. `[required]` fields receive validation status on blur (`.form-field--error` / `.form-field--valid`). Enter moves focus to the next field; Enter on the last field triggers submit.
+- **FAB (Floating Action Button):** Color follows the module accent token (`--module-accent`) - each module defines its own accent color. Specular inner highlight + attention ring pulse. Hidden when the virtual keyboard is open (`visualViewport.resize`, threshold 75% of window height).
 - **Module accent colors:** `--module-accent` is applied on three visual layers - (1) active nav tab (bottom bar + sidebar stripe), (2) toolbar `border-top: 3px`, (3) cards/rows `border-left: 3px`. The active accent is written to `--active-module-accent` on `:root` on every navigation change. Falls back to `--color-accent` for pages without a module context.
-- **Navigation:** Bottom tab bar on mobile (Dashboard, Tasks, Calendar, Meals, More). Sidebar on desktop.
-- **Transitions:** Directional slide-X animation on page change (forward = from right, back = from left, 200ms). Respects `prefers-reduced-motion`.
+- **Navigation:** Bottom tab bar on mobile (Dashboard, Tasks, Calendar, Meals, More), auto-hides on scroll-down. Sidebar on desktop. Both use glass blur surface.
+- **Transitions:** Directional slide-X animation on page change (forward = from right, back = from left, 200ms) with spring easing. Respects `prefers-reduced-motion`.
 - **Empty states:** Consistent `.empty-state` class across all modules (icon + title + description, centered). Compact variant `.empty-state--compact` for meal slots.
-- **Modals:** Centered panel on desktop. On mobile (< 768px) bottom sheet - slides in from below, sheet handle visible, swipe-to-close (> 80px downward). `focusin` scrolls inputs into view when the virtual keyboard is open.
-- **List animation:** Staggered fade-in on load (`stagger()` from `public/utils/ux.js`) - max 5 elements staggered (30ms gap), rest appear immediately.
-- **Vibration:** `vibrate()` from `public/utils/ux.js` - short pulses for light actions (10–40ms), pattern `[30, 50, 30]` for destructive actions (delete). Respects `prefers-reduced-motion`.
+- **Modals:** Centered panel on desktop with glass overlay. On mobile (< 768px) bottom sheet - spring slide-in from below, sheet handle visible, swipe-to-close (> 80px downward). `focusin` scrolls inputs into view when the virtual keyboard is open.
+- **List animation:** Staggered spring fade-in on load (`stagger()` from `public/utils/ux.js`) - max 5 elements staggered (30ms gap), rest appear immediately.
+- **Vibration:** `vibrate()` from `public/utils/ux.js` - short pulses for light actions (10-40ms), pattern `[30, 50, 30]` for destructive actions (delete). Respects `prefers-reduced-motion`.
 - **PWA install prompt:** Appears only after 2 user interactions. Dismiss window 7 days; interaction counter resets after dismiss.
 - **PWA offline fallback:** Service worker serves `/offline.html` when the network is unreachable and `index.html` is not cached. Includes a reload button.
 

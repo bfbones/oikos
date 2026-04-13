@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-04-13
+
+### Added
+- Design system: `public/styles/glass.css` - new additive layer (~430 lines) implementing Liquid Glass aesthetics: translucent surfaces, `backdrop-filter` blur, capsule shapes, specular highlights, and spring-based motion; loaded globally after `layout.css`, all blur effects gated behind `@supports (backdrop-filter: blur(1px))`
+- Design system: Section 16 "Glass Tokens" added to `tokens.css` - ~50 new custom properties covering `--glass-bg*`, `--glass-border*`, `--blur-xs/sm/md/lg/xl`, `--opacity-glass-*`, `--glass-highlight*`, `--glass-shadow-sm/md/lg`, `--radius-glass-card/inner/chip/button`, `--ease-glass`, `--transition-glass`; full dark mode overrides in both `@media (prefers-color-scheme: dark)` and `[data-theme="dark"]` blocks
+- Navigation: bottom bar now auto-hides on scroll-down (mobile only, < 1024px), reappears on scroll-up with 4 px hysteresis; implemented via `initNavHideOnScroll()` in `router.js` and `.nav-bottom--hidden` CSS class in `glass.css`; `will-change: transform` on `.nav-bottom` for smooth GPU-composited animation
+- Animations: modal entrance uses spring easing (`glass-modal-scale-in` + `glass-sheet-in` keyframes) instead of linear fade; page transitions use spring-eased translate instead of plain ease-out; list items stagger with spring `cubic-bezier(0.34, 1.56, 0.64, 1)` spring curve
+- Accessibility: `prefers-reduced-transparency`, `prefers-reduced-motion`, and `prefers-contrast: more` media query blocks in both `tokens.css` and `glass.css` - glass effects deactivate and solid fallbacks activate automatically
+
+### Changed
+- Glass input styles: `.contacts-toolbar__search-input`, `.notes-toolbar__search-input`, and `.quick-add__input` now use `--radius-glass-button`, `--glass-border-subtle`, and a `color-mix` focus ring for visual consistency with the glass layer (applied directly in module CSS files to respect CSS load order)
+- Bottom nav / sidebar: glass blur surface, subtle top highlight, elevated shadow via `glass.css`
+- Modal: glass overlay, spring entrance, capsule close button, specular FAB ring pulse (`fab-ring-pulse` keyframe)
+- Buttons / FAB: capsule shape via `--radius-glass-button`, specular inner highlight on primary buttons, glass hover glow on secondary
+- Skeleton loading: upgraded shimmer gradient uses glass highlight colors
+- Focus rings: animated expand-contract ring via `glass-focus-ring` keyframe, applied to interactive glass elements
+- PWA viewport: `maximum-scale` changed from `1` to `5` (WCAG 1.4.4 - Resize Text, users can pinch-zoom again)
+- Theme color meta tag: `#007AFF` → `#2563EB` (light) and `#1C1C1E` → `#222220` (dark) to match updated token palette
+
+### Fixed
+- Accessibility: `--color-text-tertiary` corrected from `#737370` to `#6B6B68` (passes WCAG AA 4.5:1 on `--color-bg`)
+- Accessibility: `--color-info` corrected from `#54AEFF` to `#0969DA` (passes WCAG AA 4.5:1 on white)
+- Accessibility: modal overlay now carries `aria-label` and `role="presentation"` for correct screen-reader semantics
+- Settings: fixed three stale token references (`--color-background` → `--color-bg`, `--duration-fast` → `--transition-fast`, `--color-surface-raised` → `--color-surface-2`)
+- Notes: fixed stale token reference `--color-text` → `--color-text-primary` in search input border
+- Dashboard: weather widget gradient now uses `var(--color-accent-deep)` instead of hardcoded `#1E5CB3`
+- Meals: badge padding now uses spacing tokens (`var(--space-0h) var(--space-2)`) instead of hardcoded `2px 8px`
+
 ## [0.16.3] - 2026-04-13
 
 ### Added
