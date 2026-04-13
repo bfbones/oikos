@@ -44,9 +44,20 @@ Every table: `id INTEGER PRIMARY KEY`, `created_at TEXT`, `updated_at TEXT` (ISO
 | list_id | INTEGER | FK → Shopping Lists, NOT NULL |
 | name | TEXT | NOT NULL |
 | quantity | TEXT | e.g. "500g", "2 pieces" |
-| category | TEXT | Fruit & Vegetables, Dairy, Meat & Fish, Bakery, Drinks, Frozen, Household, Drugstore, Other |
+| category | TEXT | FK → Shopping Categories (by name) |
 | is_checked | INTEGER | 0/1 |
 | added_from_meal | INTEGER | FK → Meals, nullable |
+
+### Shopping Categories
+Custom, household-wide category list for shopping items. Replaces the old hardcoded category set.
+
+| Column | Type | Constraint |
+|--------|------|-----------|
+| id | INTEGER | PRIMARY KEY |
+| name | TEXT | NOT NULL |
+| sort_order | INTEGER | NOT NULL |
+| created_at | TEXT | |
+| updated_at | TEXT | |
 
 ### Meals
 | Column | Type | Constraint |
@@ -55,6 +66,7 @@ Every table: `id INTEGER PRIMARY KEY`, `created_at TEXT`, `updated_at TEXT` (ISO
 | meal_type | TEXT | breakfast, lunch, dinner, snack |
 | title | TEXT | NOT NULL |
 | notes | TEXT | |
+| recipe_url | TEXT | nullable, URL to recipe |
 | created_by | INTEGER | FK → Users, NOT NULL |
 
 ### Meal Ingredients
@@ -235,6 +247,7 @@ User management and app configuration. Logged-in users only.
 - **Calendar integration:** connect/disconnect Google Calendar OAuth, store Apple Calendar (CalDAV) credentials, configure sync interval
 - **Weather:** configure OpenWeatherMap location
 - **Language:** System (follows `navigator.language`), German, English, Spanish, French, Italian, Swedish, Greek, Russian, Turkish, Chinese - via `oikos-locale-picker` web component; switch without page reload
+- **Tab navigation:** Settings is organized in six tabs (General, Meals, Budget, Shopping, Calendar, Account). Sticky tab bar, active tab persists in sessionStorage, Calendar tab auto-activates after OAuth callbacks.
 - **App info:** version, license
 
 ### Budget (`/budget`)
@@ -327,7 +340,7 @@ All UI strings are managed via `public/i18n.js`. No hardcoded text in JS files o
 ### Architecture
 
 - **Module:** `public/i18n.js` - exports: `initI18n()`, `setLocale()`, `t(key, params?)`, `getLocale()`, `getSupportedLocales()`, `formatDate(date)`, `formatTime(date)`
-- **Locale files:** `public/locales/de.json` (reference), `public/locales/en.json`, `public/locales/it.json`, `public/locales/sv.json` - structure: `{ "module.camelCaseKey": "Value" }`
+- **Locale files:** `public/locales/de.json` (reference), `public/locales/en.json`, `public/locales/es.json`, `public/locales/fr.json`, `public/locales/it.json`, `public/locales/sv.json`, `public/locales/el.json`, `public/locales/ru.json`, `public/locales/tr.json`, `public/locales/zh.json` - structure: `{ "module.camelCaseKey": "Value" }`
 - **Variables:** `{{variable}}` syntax in translation strings, e.g. `t('tasks.assignedTo', { name: 'Anna' })`
 - **Fallback chain:** active locale → German (`de`) → key itself
 - **Date format:** `Intl.DateTimeFormat` with current locale - use `formatDate()` and `formatTime()` from `i18n.js`
@@ -336,7 +349,7 @@ All UI strings are managed via `public/i18n.js`. No hardcoded text in JS files o
 
 1. `localStorage` entry `oikos-locale` (manual selection)
 2. `navigator.languages[0]` (browser language)
-3. Fallback: `de`
+3. Fallback: `en`
 
 ### Supported Languages
 

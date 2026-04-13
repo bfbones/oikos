@@ -163,5 +163,5 @@ Two triggers: `prefers-color-scheme: dark` (system) or `data-theme="dark"` (manu
 - **Module-specific CSS:** Each page has its own stylesheet loaded dynamically - keeps initial bundle minimal
 - **Page transitions:** Directional slide animations based on navigation order (left/right)
 - **Glass overlays:** `rgba(255, 255, 255, 0.18)` surfaces for elements on colored backgrounds (e.g., action buttons on module headers)
-- **Priority system:** Four levels (urgent/high/medium/low) with dedicated color + translucent background tokens
+- **Priority system:** Five levels (none/low/medium/high/urgent) with dedicated color + translucent background tokens. "None" is the default for new tasks and hides the priority badge entirely.
 - **Swipe gestures:** Touch-friendly item interactions (swipe to delete/complete) on mobile

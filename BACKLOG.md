@@ -37,3 +37,17 @@ New suggestion? → [Open an issue](https://github.com/ulsklyc/oikos/issues/new?
 | - | Security hardening: XSS, rate limiter bypass, OAuth CSRF, CSV injection, session invalidation | v0.5.9 |
 | - | Budget: Fix update failing when category changes | v0.6.0 |
 | - | Upgrade bcrypt 5 → 6, ESM migration, structured logger, remove SESSION_SECRET fallback | v0.7.0 |
+| - | XSS fix: shared esc() utility, deduplicate escHtml across all modules | v0.7.1 |
+| - | Dashboard: Shopping list widget (lists with open items, progress bar, item preview) | v0.8.0 |
+| - | Tasks: optional "None" priority level (default for new tasks, hides badge) | v0.9.0 |
+| - | Tasks: persist kanban/list view in localStorage; ?view=kanban URL parameter | v0.9.1 |
+| - | Meals: customizable meal type visibility (breakfast/lunch/dinner/snack toggles in Settings) | v0.10.0 |
+| - | Budget: configurable currency (13 currencies selectable in Settings → Budget) | v0.11.2 |
+| - | Swedish (sv) translation contributed by @olsson82 | v0.11.3 |
+| - | Shopping: custom categories - add, rename, delete, reorder in Settings | v0.12.0 |
+| - | Meals: optional recipe link per meal (recipe_url field, link icon on card) | v0.13.0 |
+| - | Spanish (es) translation - all sections fully translated | v0.14.0 |
+| - | Settings: categorized tab navigation (General, Meals, Budget, Shopping, Calendar, Account) | v0.16.0 |
+| - | Budget: CNY (Chinese Yuan) added to currency list (#42) | v0.16.2 |
+| - | i18n: French (fr), Turkish (tr), Russian (ru), Greek (el), Chinese Simplified (zh) locales | v0.16.3 |
+| - | Budget: TRY (Turkish Lira) and RUB (Russian Ruble) added to currency list | v0.16.3 |
