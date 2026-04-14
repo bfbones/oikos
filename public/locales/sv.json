@@ -77,7 +77,14 @@
     "dueSoon": "Förfaller idag",
     "dueTomorrow": "Förfaller imorgon",
     "allDay": "Hela dagen",
-    "shoppingMore": "+{{count}} till"
+    "shoppingMore": "+{{count}} till",
+    "weather": "Väder",
+    "customize": "Anpassa",
+    "customizeTitle": "Anpassa widgets",
+    "customizeReset": "Återställ",
+    "customizeSaved": "Instrumentpanel sparad",
+    "customizeMoveUp": "Flytta upp",
+    "customizeMoveDown": "Flytta ner"
   },
   "tasks": {
     "title": "Uppgifter",

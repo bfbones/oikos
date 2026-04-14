@@ -77,7 +77,14 @@
     "dueSoon": "Vence hoy",
     "dueTomorrow": "Vence mañana",
     "allDay": "Todo el día",
-    "shoppingMore": "+{{count}} más"
+    "shoppingMore": "+{{count}} más",
+    "weather": "Clima",
+    "customize": "Personalizar",
+    "customizeTitle": "Personalizar widgets",
+    "customizeReset": "Restablecer",
+    "customizeSaved": "Panel guardado",
+    "customizeMoveUp": "Subir",
+    "customizeMoveDown": "Bajar"
   },
   "tasks": {
     "title": "Tareas",

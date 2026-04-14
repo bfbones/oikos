@@ -77,7 +77,14 @@
     "dueSoon": "Due today",
     "dueTomorrow": "Due tomorrow",
     "allDay": "All day",
-    "shoppingMore": "+{{count}} more"
+    "shoppingMore": "+{{count}} more",
+    "weather": "Weather",
+    "customize": "Customize",
+    "customizeTitle": "Customize widgets",
+    "customizeReset": "Reset",
+    "customizeSaved": "Dashboard saved",
+    "customizeMoveUp": "Move up",
+    "customizeMoveDown": "Move down"
   },
   "tasks": {
     "title": "Tasks",

@@ -7,9 +7,35 @@
 import { api } from '/api.js';
 import { t, formatDate, formatTime, getLocale } from '/i18n.js';
 import { esc } from '/utils/html.js';
+import { openModal, closeModal } from '/components/modal.js';
 
 // Hält den AbortController des aktuellen FAB-Listeners - wird bei jedem render() erneuert.
 let _fabController = null;
+
+// --------------------------------------------------------
+// Widget-Definitionen (Reihenfolge = Standard-Layout)
+// --------------------------------------------------------
+
+const WIDGET_IDS = ['tasks', 'calendar', 'shopping', 'meals', 'notes', 'weather'];
+
+const DEFAULT_WIDGET_CONFIG = WIDGET_IDS.map((id) => ({ id, visible: true }));
+
+function widgetLabel(id) {
+  const map = {
+    tasks:    () => t('nav.tasks'),
+    calendar: () => t('nav.calendar'),
+    shopping: () => t('nav.shopping'),
+    meals:    () => t('nav.meals'),
+    notes:    () => t('nav.notes'),
+    weather:  () => t('dashboard.weather'),
+  };
+  return (map[id] ?? (() => id))();
+}
+
+function widgetIcon(id) {
+  const map = { tasks: 'check-square', calendar: 'calendar', shopping: 'shopping-cart', meals: 'utensils', notes: 'pin', weather: 'cloud-sun' };
+  return map[id] ?? 'layout-dashboard';
+}
 
 // --------------------------------------------------------
 // Hilfsfunktionen
@@ -143,10 +169,16 @@ function renderGreeting(user, stats = {}) {
 
   return `
     <div class="widget-greeting">
-      <div class="widget-greeting__content">
-        <div class="widget-greeting__title">${greeting(user.display_name)}</div>
-        <div class="widget-greeting__date">${formatDate(new Date())}</div>
-        ${statChips.length ? `<div class="widget-greeting__chips">${statChips.join('')}</div>` : ''}
+      <div class="widget-greeting__inner">
+        <div class="widget-greeting__content">
+          <div class="widget-greeting__title">${greeting(user.display_name)}</div>
+          <div class="widget-greeting__date">${formatDate(new Date())}</div>
+          ${statChips.length ? `<div class="widget-greeting__chips">${statChips.join('')}</div>` : ''}
+        </div>
+        <button class="widget-customize-btn" id="dashboard-customize-btn"
+                aria-label="${t('dashboard.customize')}" title="${t('dashboard.customize')}">
+          <i data-lucide="settings-2" style="width:16px;height:16px" aria-hidden="true"></i>
+        </button>
       </div>
     </div>
   `;
@@ -437,6 +469,133 @@ function initFab(container, signal) {
 }
 
 // --------------------------------------------------------
+// Widget-Rendering nach Konfiguration
+// --------------------------------------------------------
+
+function renderWidgets(cfg, data, weather) {
+  const renderers = {
+    tasks:    () => renderUrgentTasks(data.urgentTasks ?? []),
+    calendar: () => renderUpcomingEvents(data.upcomingEvents ?? []),
+    shopping: () => renderShoppingLists(data.shoppingLists ?? []),
+    meals:    () => renderTodayMeals(data.todayMeals ?? []),
+    notes:    () => renderPinnedNotes(data.pinnedNotes ?? []),
+    weather:  () => (weather ? renderWeatherWidget(weather) : ''),
+  };
+  return cfg
+    .filter((w) => w.visible)
+    .map((w) => (renderers[w.id] ? renderers[w.id]() : ''))
+    .join('');
+}
+
+// --------------------------------------------------------
+// Customize-Modal
+// --------------------------------------------------------
+
+function openCustomizeModal(currentConfig, onSave) {
+  let draft = currentConfig.map((w) => ({ ...w }));
+
+  function buildRows() {
+    return draft.map((w, i) => {
+      const isFirst = i === 0;
+      const isLast  = i === draft.length - 1;
+      return `
+        <div class="customize-row" data-id="${w.id}">
+          <label class="customize-row__toggle">
+            <input type="checkbox" class="customize-row__check" data-id="${w.id}"
+                   ${w.visible ? 'checked' : ''} aria-label="${widgetLabel(w.id)}">
+            <span class="customize-row__slider" aria-hidden="true"></span>
+          </label>
+          <i data-lucide="${widgetIcon(w.id)}" class="customize-row__icon" aria-hidden="true"></i>
+          <span class="customize-row__name">${widgetLabel(w.id)}</span>
+          <div class="customize-row__actions">
+            <button class="customize-row__btn" data-move="up" data-id="${w.id}"
+                    ${isFirst ? 'disabled' : ''} aria-label="${t('dashboard.customizeMoveUp')}">
+              <i data-lucide="chevron-up" style="width:14px;height:14px" aria-hidden="true"></i>
+            </button>
+            <button class="customize-row__btn" data-move="down" data-id="${w.id}"
+                    ${isLast ? 'disabled' : ''} aria-label="${t('dashboard.customizeMoveDown')}">
+              <i data-lucide="chevron-down" style="width:14px;height:14px" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  openModal({
+    title:  t('dashboard.customizeTitle'),
+    size:   'sm',
+    content: `
+      <div class="customize-list" id="customize-list">${buildRows()}</div>
+      <div class="modal-actions" style="margin-top:var(--space-4)">
+        <button type="button" class="btn btn--ghost" id="customize-reset">${t('dashboard.customizeReset')}</button>
+        <button type="button" class="btn btn--primary" id="customize-save">${t('common.save')}</button>
+      </div>`,
+    onSave(panel) {
+      if (window.lucide) window.lucide.createIcons({ el: panel });
+
+      function rebuildList() {
+        const list = panel.querySelector('#customize-list');
+        if (!list) return;
+        list.replaceChildren();
+        list.insertAdjacentHTML('beforeend', buildRows());
+        if (window.lucide) window.lucide.createIcons({ el: list });
+        wireRows();
+      }
+
+      function wireRows() {
+        const list = panel.querySelector('#customize-list');
+        if (!list) return;
+
+        list.querySelectorAll('.customize-row__check').forEach((cb) => {
+          cb.addEventListener('change', () => {
+            const id = cb.dataset.id;
+            const entry = draft.find((w) => w.id === id);
+            if (entry) entry.visible = cb.checked;
+          });
+        });
+
+        list.querySelectorAll('[data-move]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const id  = btn.dataset.id;
+            const dir = btn.dataset.move;
+            const idx = draft.findIndex((w) => w.id === id);
+            if (dir === 'up' && idx > 0) {
+              [draft[idx - 1], draft[idx]] = [draft[idx], draft[idx - 1]];
+            } else if (dir === 'down' && idx < draft.length - 1) {
+              [draft[idx], draft[idx + 1]] = [draft[idx + 1], draft[idx]];
+            }
+            rebuildList();
+          });
+        });
+      }
+
+      wireRows();
+
+      panel.querySelector('#customize-reset')?.addEventListener('click', () => {
+        draft = DEFAULT_WIDGET_CONFIG.map((w) => ({ ...w }));
+        rebuildList();
+      });
+
+      panel.querySelector('#customize-save')?.addEventListener('click', async () => {
+        const saveBtn = panel.querySelector('#customize-save');
+        saveBtn.disabled = true;
+        try {
+          await api.put('/preferences', { dashboard_widgets: draft });
+          closeModal();
+          onSave(draft);
+          window.oikos?.showToast(t('dashboard.customizeSaved'), 'success', 1500);
+        } catch {
+          window.oikos?.showToast(t('common.errorGeneric'), 'error');
+        } finally {
+          saveBtn.disabled = false;
+        }
+      });
+    },
+  });
+}
+
+// --------------------------------------------------------
 // Navigations-Links verdrahten
 // --------------------------------------------------------
 
@@ -467,9 +626,11 @@ export async function render(container, { user }) {
     <div class="dashboard">
       <div class="dashboard__grid">
         <div class="widget-greeting" style="grid-column:1/-1">
-          <div class="widget-greeting__content">
-            <div class="widget-greeting__title">${greeting(user.display_name)}</div>
-            <div class="widget-greeting__date">${formatDate(new Date())}</div>
+          <div class="widget-greeting__inner">
+            <div class="widget-greeting__content">
+              <div class="widget-greeting__title">${greeting(user.display_name)}</div>
+              <div class="widget-greeting__date">${formatDate(new Date())}</div>
+            </div>
           </div>
         </div>
         ${skeletonWidget(3)}
@@ -481,15 +642,18 @@ export async function render(container, { user }) {
     ${renderFab()}
   `;
 
-  let data    = { upcomingEvents: [], urgentTasks: [], todayMeals: [], pinnedNotes: [], shoppingLists: [] };
-  let weather = null;
+  let data         = { upcomingEvents: [], urgentTasks: [], todayMeals: [], pinnedNotes: [], shoppingLists: [] };
+  let weather      = null;
+  let widgetConfig = DEFAULT_WIDGET_CONFIG;
   try {
-    const [dashRes, weatherRes] = await Promise.all([
+    const [dashRes, weatherRes, prefsRes] = await Promise.all([
       api.get('/dashboard'),
       api.get('/weather').catch(() => ({ data: null })),
+      api.get('/preferences').catch(() => ({ data: {} })),
     ]);
-    data    = dashRes;
-    weather = weatherRes.data ?? null;
+    data         = dashRes;
+    weather      = weatherRes.data ?? null;
+    widgetConfig = prefsRes.data?.dashboard_widgets ?? DEFAULT_WIDGET_CONFIG;
   } catch (err) {
     console.error('[Dashboard] Ladefehler:', err.message);
     window.oikos?.showToast(t('dashboard.loadError'), 'warning');
@@ -506,17 +670,23 @@ export async function render(container, { user }) {
       ?? null,
   };
 
+  function rebuildGrid(cfg) {
+    const grid     = container.querySelector('.dashboard__grid');
+    const greeting = grid?.querySelector('.widget-greeting');
+    if (!grid) return;
+    grid.replaceChildren(...(greeting ? [greeting] : []));
+    grid.insertAdjacentHTML('beforeend', renderWidgets(cfg, data, weather));
+    wireLinks(container);
+    if (window.lucide) window.lucide.createIcons();
+    wireWeatherRefresh(container);
+  }
+
   container.innerHTML = `
     <div class="dashboard">
       <h1 class="sr-only">${t('dashboard.title')}</h1>
       <div class="dashboard__grid">
         ${renderGreeting(user, stats)}
-        ${renderWeatherWidget(weather)}
-        ${renderUrgentTasks(data.urgentTasks ?? [])}
-        ${renderUpcomingEvents(data.upcomingEvents ?? [])}
-        ${renderShoppingLists(data.shoppingLists ?? [])}
-        ${renderTodayMeals(data.todayMeals ?? [])}
-        ${renderPinnedNotes(data.pinnedNotes ?? [])}
+        ${renderWidgets(widgetConfig, data, weather)}
       </div>
     </div>
     ${renderFab()}
@@ -526,30 +696,33 @@ export async function render(container, { user }) {
   initFab(container, _fabController.signal);
   if (window.lucide) window.lucide.createIcons();
 
-  // Wetter-Refresh: Button + 30-Minuten-Interval
+  container.querySelector('#dashboard-customize-btn')?.addEventListener(
+    'click',
+    () => openCustomizeModal(widgetConfig, (newConfig) => {
+      widgetConfig = newConfig;
+      rebuildGrid(widgetConfig);
+    }),
+    { signal: _fabController.signal },
+  );
+
+  wireWeatherRefresh(container);
+
+  // 30-Minuten Auto-Refresh für Wetter
   const refreshBtn = container.querySelector('#weather-refresh-btn');
   if (refreshBtn) {
-    const doWeatherRefresh = async () => {
-      refreshBtn.disabled = true;
-      refreshBtn.classList.add('weather-widget__refresh--spinning');
+    const doAutoRefresh = async () => {
       try {
         const res = await api.get('/weather').catch(() => ({ data: null }));
         const wWidget = container.querySelector('#weather-widget');
         if (wWidget) {
-          const fresh = renderWeatherWidget(res.data ?? null);
-          wWidget.outerHTML = fresh;
+          wWidget.outerHTML = renderWeatherWidget(res.data ?? null);
           const newWidget = container.querySelector('#weather-widget');
           if (newWidget && window.lucide) window.lucide.createIcons({ el: newWidget });
           wireWeatherRefresh(container);
-          window.oikos?.showToast(t('dashboard.weatherUpdated'), 'success', 1500);
         }
       } catch { /* silently ignore */ }
     };
-
-    refreshBtn.addEventListener('click', doWeatherRefresh, { signal: _fabController.signal });
-
-    // 30-Minuten Auto-Refresh - abortiert wenn Seite verlassen wird
-    const timerId = setInterval(doWeatherRefresh, 30 * 60 * 1000);
+    const timerId = setInterval(doAutoRefresh, 30 * 60 * 1000);
     _fabController.signal.addEventListener('abort', () => clearInterval(timerId));
   }
 }

@@ -77,7 +77,14 @@
     "dueSoon": "今天到期",
     "dueTomorrow": "明天到期",
     "allDay": "全天",
-    "shoppingMore": "+{{count}} 更多"
+    "shoppingMore": "+{{count}} 更多",
+    "weather": "天气",
+    "customize": "自定义",
+    "customizeTitle": "自定义小组件",
+    "customizeReset": "重置",
+    "customizeSaved": "仪表板已保存",
+    "customizeMoveUp": "上移",
+    "customizeMoveDown": "下移"
   },
   "tasks": {
     "title": "任务",

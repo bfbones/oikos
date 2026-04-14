@@ -77,7 +77,14 @@
     "dueSoon": "Сегодня",
     "dueTomorrow": "Завтра",
     "allDay": "Весь день",
-    "shoppingMore": "+{{count}} ещё"
+    "shoppingMore": "+{{count}} ещё",
+    "weather": "Погода",
+    "customize": "Настроить",
+    "customizeTitle": "Настроить виджеты",
+    "customizeReset": "Сбросить",
+    "customizeSaved": "Панель сохранена",
+    "customizeMoveUp": "Вверх",
+    "customizeMoveDown": "Вниз"
   },
   "tasks": {
     "title": "Задачи",

@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.18.1] - 2026-04-14
+
+### Added
+- Customizable dashboard layout: users can now show/hide individual widgets and reorder them via a settings button in the greeting header
+- New "Anpassen" button (settings icon) in the dashboard greeting widget opens a modal with toggle switches and up/down controls for each widget (Tasks, Calendar, Shopping, Meals, Notes, Weather)
+- Widget configuration persisted server-side via `dashboard_widgets` preference key in `sync_config` table - survives page reload and applies across all family members
+- Reset to default layout button in the customize modal
+- New i18n keys for all 10 supported locales: `dashboard.customize`, `dashboard.customizeTitle`, `dashboard.customizeReset`, `dashboard.customizeSaved`, `dashboard.weather`, `dashboard.customizeMoveUp`, `dashboard.customizeMoveDown`
+- Backend: `GET /api/v1/preferences` now includes `dashboard_widgets` in the response; `PUT /api/v1/preferences` accepts `dashboard_widgets` array with validation and normalization
+
 ## [0.18.0] - 2026-04-14
 
 ### Added

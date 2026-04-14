@@ -77,7 +77,14 @@
     "dueSoon": "À rendre aujourd'hui",
     "dueTomorrow": "À rendre demain",
     "allDay": "Toute la journée",
-    "shoppingMore": "+{{count}} de plus"
+    "shoppingMore": "+{{count}} de plus",
+    "weather": "Météo",
+    "customize": "Personnaliser",
+    "customizeTitle": "Personnaliser les widgets",
+    "customizeReset": "Réinitialiser",
+    "customizeSaved": "Tableau de bord sauvegardé",
+    "customizeMoveUp": "Monter",
+    "customizeMoveDown": "Descendre"
   },
   "tasks": {
     "title": "Tâches",

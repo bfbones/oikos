@@ -77,7 +77,14 @@
     "dueSoon": "Λήγει σήμερα",
     "dueTomorrow": "Λήγει αύριο",
     "allDay": "Όλη μέρα",
-    "shoppingMore": "+{{count}} ακόμα"
+    "shoppingMore": "+{{count}} ακόμα",
+    "weather": "Καιρός",
+    "customize": "Προσαρμογή",
+    "customizeTitle": "Προσαρμογή widgets",
+    "customizeReset": "Επαναφορά",
+    "customizeSaved": "Πίνακας αποθηκεύτηκε",
+    "customizeMoveUp": "Πάνω",
+    "customizeMoveDown": "Κάτω"
   },
   "tasks": {
     "title": "Εργασίες",

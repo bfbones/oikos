@@ -77,7 +77,14 @@
     "dueSoon": "Heute fällig",
     "dueTomorrow": "Morgen fällig",
     "allDay": "Ganztägig",
-    "shoppingMore": "+{{count}} weitere"
+    "shoppingMore": "+{{count}} weitere",
+    "weather": "Wetter",
+    "customize": "Anpassen",
+    "customizeTitle": "Widgets anpassen",
+    "customizeReset": "Standard",
+    "customizeSaved": "Dashboard gespeichert",
+    "customizeMoveUp": "Nach oben",
+    "customizeMoveDown": "Nach unten"
   },
   "tasks": {
     "title": "Aufgaben",

@@ -77,7 +77,14 @@
     "dueSoon": "Scade oggi",
     "dueTomorrow": "Scade domani",
     "allDay": "Tutto il giorno",
-    "shoppingMore": "+{{count}} altri"
+    "shoppingMore": "+{{count}} altri",
+    "weather": "Meteo",
+    "customize": "Personalizza",
+    "customizeTitle": "Personalizza widget",
+    "customizeReset": "Ripristina",
+    "customizeSaved": "Dashboard salvata",
+    "customizeMoveUp": "Su",
+    "customizeMoveDown": "Giù"
   },
   "tasks": {
     "title": "Compiti",

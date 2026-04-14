@@ -18,6 +18,9 @@ const DEFAULT_MEAL_TYPES = VALID_MEAL_TYPES.join(',');
 const VALID_CURRENCIES = ['EUR', 'USD', 'GBP', 'SEK', 'NOK', 'DKK', 'CHF', 'CNY', 'PLN', 'CZK', 'HUF', 'JPY', 'AUD', 'CAD', 'TRY', 'RUB'];
 const DEFAULT_CURRENCY = 'EUR';
 
+const VALID_WIDGET_IDS = ['tasks', 'calendar', 'shopping', 'meals', 'notes', 'weather'];
+const DEFAULT_WIDGET_CONFIG = JSON.stringify(VALID_WIDGET_IDS.map((id) => ({ id, visible: true })));
+
 // --------------------------------------------------------
 // Hilfsfunktionen
 // --------------------------------------------------------
@@ -37,6 +40,34 @@ function cfgSet(key, value) {
 }
 
 // --------------------------------------------------------
+// Widget-Hilfsfunktionen
+// --------------------------------------------------------
+
+function parseWidgetConfig(raw) {
+  try {
+    const parsed = JSON.parse(raw ?? DEFAULT_WIDGET_CONFIG);
+    return normalizeWidgetConfig(parsed);
+  } catch {
+    return JSON.parse(DEFAULT_WIDGET_CONFIG);
+  }
+}
+
+function normalizeWidgetConfig(input) {
+  const valid = Array.isArray(input)
+    ? input
+      .filter((w) => w && typeof w === 'object' && VALID_WIDGET_IDS.includes(w.id))
+      .map((w) => ({ id: w.id, visible: Boolean(w.visible) }))
+    : [];
+
+  // Fehlende Widget-IDs am Ende ergänzen
+  const presentIds = new Set(valid.map((w) => w.id));
+  for (const id of VALID_WIDGET_IDS) {
+    if (!presentIds.has(id)) valid.push({ id, visible: true });
+  }
+  return valid;
+}
+
+// --------------------------------------------------------
 // GET /api/v1/preferences
 // Alle Haushalt-Praeferenzen lesen.
 // Response: { data: { visible_meal_types: string[] } }
@@ -47,11 +78,13 @@ router.get('/', (req, res) => {
     const raw = cfgGet('visible_meal_types') ?? DEFAULT_MEAL_TYPES;
     const visibleMealTypes = raw.split(',').filter((t) => VALID_MEAL_TYPES.includes(t));
     const currency = cfgGet('currency') ?? DEFAULT_CURRENCY;
+    const dashboardWidgets = parseWidgetConfig(cfgGet('dashboard_widgets'));
 
     res.json({
       data: {
         visible_meal_types: visibleMealTypes,
         currency,
+        dashboard_widgets: dashboardWidgets,
       },
     });
   } catch (err) {
@@ -69,7 +102,7 @@ router.get('/', (req, res) => {
 
 router.put('/', (req, res) => {
   try {
-    const { visible_meal_types, currency } = req.body;
+    const { visible_meal_types, currency, dashboard_widgets } = req.body;
 
     if (visible_meal_types !== undefined) {
       if (!Array.isArray(visible_meal_types)) {
@@ -89,14 +122,24 @@ router.put('/', (req, res) => {
       cfgSet('currency', currency);
     }
 
+    if (dashboard_widgets !== undefined) {
+      if (!Array.isArray(dashboard_widgets)) {
+        return res.status(400).json({ error: 'dashboard_widgets muss ein Array sein', code: 400 });
+      }
+      const normalized = normalizeWidgetConfig(dashboard_widgets);
+      cfgSet('dashboard_widgets', JSON.stringify(normalized));
+    }
+
     const rawMealTypes = cfgGet('visible_meal_types') ?? DEFAULT_MEAL_TYPES;
     const savedMealTypes = rawMealTypes.split(',').filter((t) => VALID_MEAL_TYPES.includes(t));
     const savedCurrency = cfgGet('currency') ?? DEFAULT_CURRENCY;
+    const savedWidgets = parseWidgetConfig(cfgGet('dashboard_widgets'));
 
     res.json({
       data: {
         visible_meal_types: savedMealTypes,
         currency: savedCurrency,
+        dashboard_widgets: savedWidgets,
       },
     });
   } catch (err) {

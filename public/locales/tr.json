@@ -77,7 +77,14 @@
     "dueSoon": "Bugün bitiyor",
     "dueTomorrow": "Yarın bitiyor",
     "allDay": "Tüm gün",
-    "shoppingMore": "+{{count}} daha"
+    "shoppingMore": "+{{count}} daha",
+    "weather": "Hava",
+    "customize": "Özelleştir",
+    "customizeTitle": "Widget'ları özelleştir",
+    "customizeReset": "Sıfırla",
+    "customizeSaved": "Pano kaydedildi",
+    "customizeMoveUp": "Yukarı",
+    "customizeMoveDown": "Aşağı"
   },
   "tasks": {
     "title": "Görevler",
