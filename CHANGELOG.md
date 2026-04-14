@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.19.5] - 2026-04-14
+
+### Fixed
+- iOS PWA: black gap below bottom navigation in standalone mode - iOS reserves the home indicator area outside the CSS viewport, leaving a visible black strip. A fixed `::after` pseudo-element on `body` now fills this area with the surface color. Also added explicit `background-color` to `body` element.
+
 ## [0.19.4] - 2026-04-14
 
 ### Fixed

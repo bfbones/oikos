@@ -29,6 +29,7 @@ html {
 body {
   height: 100dvh;
   overflow: hidden;
+  background-color: var(--color-bg);
 }
 
 img, svg, video {

@@ -76,4 +76,19 @@ nav,
   .app-content {
     overscroll-behavior-y: contain;
   }
+
+  /* iOS PWA: Schwarzen Streifen unter der Nav verhindern.
+   * iOS reserviert den Home-Indicator-Bereich unterhalb des CSS-Viewports.
+   * Ein ::after-Element mit fester Position füllt diesen Bereich mit der
+   * Surface-Farbe, sodass kein schwarzer Spalt sichtbar ist. */
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: env(safe-area-inset-bottom, 0px);
+    background-color: var(--color-surface);
+    z-index: var(--z-nav);
+  }
 }
