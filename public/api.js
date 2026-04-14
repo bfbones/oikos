@@ -6,8 +6,12 @@
 
 const API_BASE = '/api/v1';
 
-/** Liest den CSRF-Token aus dem Cookie (gesetzt vom Server nach Login). */
+/** In-Memory CSRF-Token (zuverlaessiger als document.cookie auf iOS Safari/PWA). */
+let _csrfToken = '';
+
+/** Liest den CSRF-Token: bevorzugt In-Memory, Fallback auf Cookie. */
 function getCsrfToken() {
+  if (_csrfToken) return _csrfToken;
   return document.cookie.split(';')
     .map((c) => c.trim())
     .find((c) => c.startsWith('csrf-token='))
@@ -46,13 +50,22 @@ async function apiFetch(path, options = {}, _retried = false) {
   }
 
   // CSRF-Token-Desync (haeufig nach iOS-PWA-Resume): einmal GET /auth/me
-  // ausfuehren um den CSRF-Cookie zu erneuern, dann den Request wiederholen.
+  // ausfuehren um den CSRF-Token zu erneuern, dann den Request wiederholen.
   if (response.status === 403 && stateChanging && !_retried) {
-    await fetch(`${API_BASE}/auth/me`, { credentials: 'same-origin', cache: 'no-store' });
+    const meRes = await fetch(`${API_BASE}/auth/me`, { credentials: 'same-origin', cache: 'no-store' });
+    if (meRes.status === 401) {
+      window.dispatchEvent(new CustomEvent('auth:expired'));
+      throw new Error('Sitzung abgelaufen.');
+    }
+    const meData = await meRes.json().catch(() => null);
+    if (meData?.csrfToken) _csrfToken = meData.csrfToken;
     return apiFetch(path, options, true);
   }
 
   const data = await response.json().catch(() => null);
+
+  // CSRF-Token aus Response-Body extrahieren (zuverlaessiger als Cookie auf iOS)
+  if (data?.csrfToken) _csrfToken = data.csrfToken;
 
   if (!response.ok) {
     const message = data?.error || `HTTP ${response.status}`;

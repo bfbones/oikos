@@ -209,6 +209,7 @@ router.post('/login', loginLimiter, async (req, res) => {
           avatar_color: user.avatar_color,
           role: user.role,
         },
+        csrfToken: req.session.csrfToken,
       });
     });
   } catch (err) {
@@ -260,7 +261,7 @@ router.get('/me', requireAuth, (req, res) => {
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 
-    res.json({ user });
+    res.json({ user, csrfToken: req.session.csrfToken });
   } catch (err) {
     log.error('/me Fehler:', err);
     res.status(500).json({ error: 'Interner Serverfehler.', code: 500 });

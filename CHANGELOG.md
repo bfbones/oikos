@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.19.4] - 2026-04-14
+
+### Fixed
+- iOS: persistent "forbidden" (403) errors caused by iOS Safari/PWA not reliably exposing CSRF cookie via `document.cookie`. CSRF token is now returned in the response body of `/auth/login` and `/auth/me` and stored in-memory, bypassing cookie read issues entirely. Cookie is still set as fallback.
+- CSRF retry: `/auth/me` refresh now reads the token from the response body instead of relying on the cookie being available. Also handles expired sessions (401) during retry instead of silently failing.
+
 ## [0.19.3] - 2026-04-14
 
 ### Added
