@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.4] - 2026-04-16
+
+### Fixed
+- iOS PWA: bottom navigation bar appeared visually higher than on Android. Changed `.nav-bottom` from `position: fixed` to a flex child of `.app-shell` (`position: relative; flex-shrink: 0`). With `position: fixed` and `will-change: transform` (used for the hide/show animation), iOS's compositor could misplace the nav bar. As a flex child at the end of a `height: 100dvh` container, the nav is guaranteed to sit flush at the physical screen bottom on all platforms. Removed the redundant `padding-bottom` clearance from `.app-content`, `.tasks-page`, and `.dashboard` (no longer needed since the nav no longer overlaps the content area).
+
 ## [0.20.3] - 2026-04-16
 
 ### Fixed

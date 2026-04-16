@@ -96,7 +96,6 @@
 .app-content {
   flex: 1;
   min-height: 0;
-  padding-bottom: calc(var(--nav-bottom-height) + var(--safe-area-inset-bottom));
   overflow-y: auto;
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
@@ -114,10 +113,13 @@
  * Leichter Blur-Effekt für Glassmorphismus.
  * -------------------------------------------------------- */
 .nav-bottom {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  /* Flex-Kind von .app-shell statt position: fixed - zuverlässiger auf iOS PWA.
+   * position: fixed kann durch will-change: transform in iOS-Compositor-Layern
+   * falsch referenziert werden. Als Flex-Kind am Ende der 100dvh-App-Shell ist
+   * die Position garantiert am Viewport-Bottom. */
+  position: relative;
+  flex-shrink: 0;
+  width: 100%;
   background-color: color-mix(in srgb, var(--color-surface) 85%, transparent);
   border-top: 1px solid var(--color-border-subtle);
   display: flex;
