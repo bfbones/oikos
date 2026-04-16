@@ -590,6 +590,38 @@ if (window.visualViewport) {
 }
 
 // --------------------------------------------------------
+// iOS PWA: Viewport-Zoom bei Tastatur-Erscheinen verhindern.
+// iOS Safari/WKWebView zoomt ins Layout wenn ein Formularfeld fokussiert wird
+// und stellt den Zoom nach Tastatur-Schliessen im Standalone-Modus nicht
+// automatisch zurück → Menüpunkte verschwinden aus dem sichtbaren Bereich.
+//
+// Fix: maximum-scale=1 während des Focus setzt (verhindert Zoom),
+// danach original Wert wiederherstellen (erhält manuelle Zoom-Möglichkeit
+// für Barrierefreiheit). Nur auf iOS-Geräten aktiv.
+// --------------------------------------------------------
+if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+  const metaViewport = document.querySelector('meta[name="viewport"]');
+  if (metaViewport) {
+    const originalContent = metaViewport.getAttribute('content');
+    const noZoomContent = originalContent.replace(/maximum-scale=\d+/, 'maximum-scale=1');
+
+    document.addEventListener('focusin', ({ target }) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) {
+        metaViewport.setAttribute('content', noZoomContent);
+      }
+    });
+
+    document.addEventListener('focusout', ({ target }) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) {
+        // Kurze Verzögerung: iOS braucht ~150ms um Layout nach Tastatur-
+        // Schliessen wiederherzustellen, bevor scale zurückgesetzt wird.
+        setTimeout(() => metaViewport.setAttribute('content', originalContent), 150);
+      }
+    });
+  }
+}
+
+// --------------------------------------------------------
 // Initialisierung
 // --------------------------------------------------------
 (async () => {
