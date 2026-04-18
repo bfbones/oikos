@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.10] - 2026-04-18
+
+### Changed
+- Upgraded Express 4 → 5 (`^5.2.1`): modernised wildcard SPA fallback route from `'*'` to `'/{*path}'` for compatibility with path-to-regexp v8; all other Express APIs in the codebase were already Express 5 compatible (closes #54)
+
 ## [0.20.9] - 2026-04-18
 
 ### Added

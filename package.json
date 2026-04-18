@@ -1,6 +1,6 @@
 {
   "name": "oikos",
-  "version": "0.20.9",
+  "version": "0.20.10",
   "description": "Self-hosted family planner - calendar, tasks, shopping, meal planning, budget and more. Private, open-source, no subscription.",
   "main": "server/index.js",
   "type": "module",
@@ -27,7 +27,7 @@
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.9.0",
     "dotenv": "^17.4.2",
-    "express": "^4.21.2",
+    "express": "^5.2.1",
     "express-rate-limit": "^8.3.2",
     "express-session": "^1.19.0",
     "helmet": "^8.1.0",

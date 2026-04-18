@@ -189,7 +189,7 @@ const spaLimiter = rateLimit({
 // --------------------------------------------------------
 // SPA Fallback: Alle nicht-API-Routen → index.html
 // --------------------------------------------------------
-app.get('*', spaLimiter, (req, res) => {
+app.get('/{*path}', spaLimiter, (req, res) => {
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({ error: 'Nicht gefunden.', code: 404 });
   }
