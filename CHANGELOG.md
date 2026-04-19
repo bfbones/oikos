@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.13] - 2026-04-19
+
+### Added
+- Budget: income entries now have dedicated categories (Earned Income, Investment Income, Transfer & Gift Income, Government & Social Benefits, Other Income) separate from expense categories; the category dropdown in the budget modal updates dynamically when switching between income and expense types (closes #55)
+- Budget: all 15 supported locales include translations for the new income categories
+
 ## [0.20.12] - 2026-04-19
 
 ### Fixed
