@@ -230,6 +230,7 @@ const MIGRATIONS_SQL = {
     CREATE UNIQUE INDEX idx_calendar_sub_extid
       ON calendar_events (subscription_id, external_calendar_id)
       WHERE subscription_id IS NOT NULL;
+    CREATE INDEX IF NOT EXISTS idx_calendar_sub ON calendar_events(subscription_id);
   `,
 };
 
