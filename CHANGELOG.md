@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.32] - 2026-04-20
+
+### Changed
+- Dark mode switched from blue-tinted (Option B) to deep warm (Option A): background `#1A1A18`, cards `#222220`, sidebar `#141413` — warmer and more inviting feel
+
 ## [0.20.31] - 2026-04-20
 
 ### Fixed
