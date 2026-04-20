@@ -69,7 +69,7 @@ Extract `parseICS`, `unfoldLines`, `formatICSDate`, `tzLocalToUTC`, `applyDurati
 
 | Export | Description |
 |--------|-------------|
-| `fetchAndParse(url)` | HTTP GET the ICS URL, pass response text to `parseICS()` |
+| `fetchAndParse(url)` | Normalize `webcal://` → `https://`, HTTP GET the ICS URL, pass response text to `parseICS()` |
 | `sync(subscriptionId?)` | Sync one subscription (by id) or all; skip events with `user_modified = 1`; upsert via `external_calendar_id = UID`; update `last_sync` |
 | `getAll(userId)` | Return all subscriptions visible to userId (own + shared) |
 | `create(userId, { name, url, color, shared })` | Insert new subscription, trigger initial sync |
@@ -135,7 +135,7 @@ All new strings in `public/locales/de.json` under:
 
 | Scenario | Behavior |
 |----------|----------|
-| ICS URL unreachable | Log warning, keep existing events, update `last_sync` with error note |
+| ICS URL unreachable | Log warning, keep existing events, leave `last_sync` unchanged |
 | Invalid ICS content | Log warning, skip malformed VEVENTs, continue with valid ones |
 | URL returns non-ICS content | Log error, abort sync for this subscription |
 | Unauthorized edit/delete | 403 response |
