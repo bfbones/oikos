@@ -851,11 +851,13 @@ function currentTheme() {
 
 function applyTheme(value) {
   localStorage.setItem('oikos-theme', value);
-  if (value === 'light' || value === 'dark') {
-    document.documentElement.setAttribute('data-theme', value);
+  if (value === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  } else if (value === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
   } else {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+    document.documentElement.removeAttribute('data-theme');
+    // tokens.css @media (prefers-color-scheme: dark) übernimmt sofort
   }
 }
 

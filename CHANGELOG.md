@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.28] - 2026-04-20
+
+### Fixed
+- Dark mode "System" setting now reliably follows the OS preference on every page load, even in browsers where JavaScript `matchMedia` is restricted (e.g. Brave with fingerprint protection); CSS `@media (prefers-color-scheme: dark)` now serves as the authoritative source for system preference detection instead of JS
+
 ## [0.20.27] - 2026-04-20
 
 ### Fixed

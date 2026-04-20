@@ -40,24 +40,18 @@
   <link rel="stylesheet" href="/styles/login.css" />
   <link rel="stylesheet" href="/styles/reminders.css" />
 
-  <!-- Theme: Vor CSS-Rendering anwenden (Flash-Prevention + System-Sync).
-       Setzt data-theme einmalig beim Laden, damit tokens.css nur [data-theme="dark"]
-       braucht — kein duplizierter @media-Block mehr nötig. -->
+  <!-- Theme: explizite Nutzer-Overrides vor CSS-Rendering anwenden (Flash-Prevention).
+       System-Präferenz wird durch @media (prefers-color-scheme: dark) in tokens.css
+       direkt per CSS behandelt — kein JS-matchMedia erforderlich. -->
   <script>
     (function() {
       var stored = localStorage.getItem('oikos-theme');
-      var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (stored === 'dark' || stored === 'light') {
-        document.documentElement.setAttribute('data-theme', stored);
-      } else {
-        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      if (stored === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      } else if (stored === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
       }
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-        var current = localStorage.getItem('oikos-theme');
-        if (!current || current === 'system') {
-          document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-        }
-      });
+      // System/null: tokens.css @media (prefers-color-scheme: dark) übernimmt
     })();
   </script>
 
