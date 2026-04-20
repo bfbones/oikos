@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.38] - 2026-04-21
+
+### Added
+- ICS-URL calendar subscriptions: any user can subscribe to external calendars via HTTPS or webcal:// URL
+- Per-subscription visibility (private or shared with all family members), custom color, and manual sync trigger
+- REST API: `GET/POST /api/v1/calendar/subscriptions`, `PATCH/DELETE /api/v1/calendar/subscriptions/:id`, `POST /api/v1/calendar/subscriptions/:id/sync`
+- `POST /api/v1/calendar/:id/reset` endpoint to clear `user_modified` on ICS events, allowing the next sync to restore upstream data
+- ICS visibility filter on `GET /api/v1/calendar` and `/upcoming`: private subscription events are hidden from other users
+- ICS subscription management card in Settings → Kalender tab (below Apple Calendar): subscription list with color dot, visibility badge, last-sync timestamp; inline add form with URL, name, color picker, and shared toggle; sync and delete actions
+- "Auf Original zurücksetzen" link in calendar event popup for user-modified ICS events
+- `user_modified = 1` is set automatically when any externally-sourced event (ICS, Google, Apple) is edited by the user
+- ICS sync integrated into the periodic `runSync()` scheduler alongside Google and Apple Calendar
+- All new UI strings in `public/locales/de.json` under `settings.ics.*` and `calendar.ics.*`
+
 ## [0.20.37] - 2026-04-20
 
 ### Added
