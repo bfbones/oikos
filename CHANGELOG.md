@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.18] - 2026-04-20
+
+### Changed
+- Meals: Zutaten-Kategorien im Mahlzeiten-Dialog auf lebensmittelrelevante Kategorien beschränkt (Haushalt und Drogerie ausgeblendet)
+- Refactoring: Kategorie-Übersetzungslogik (`categoryLabel`) und `DEFAULT_CATEGORY_NAME` in neues geteiltes Utility `public/utils/shopping-categories.js` ausgelagert; Shopping- und Meals-Seiten nutzen nun die gemeinsame Implementierung
+
 ## [0.20.17] - 2026-04-20
 
 ### Changed
