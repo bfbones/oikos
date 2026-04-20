@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.30] - 2026-04-20
+
+### Changed
+- Desktop body font size increased from 14px to 15px (`--text-base`) for improved readability
+- Interactive cards now show a stronger pressed state on touch (scale 0.98 + surface-3 background) instead of the barely-perceptible scale(0.99)
+
+### Fixed
+- Added clarifying comment to `--color-surface-2` token explaining its recessed/sunken semantics (darker than background in dark mode, not an elevation level)
+
 ## [0.20.29] - 2026-04-20
 
 ### Changed

@@ -65,6 +65,7 @@
   --color-bg:             var(--neutral-100);
   --_color-surface:       #FFFFFF;
   --color-surface:        var(--_color-surface);
+  /* surface-2: recessed/vertieft (dunkler als bg in dark mode — kein Elevations-Token) */
   --color-surface-2:      var(--neutral-50);
   --_color-surface-3:     var(--_neutral-150);
   --color-surface-3:      var(--_color-surface-3);
@@ -243,7 +244,7 @@
   /* Size-Skala */
   --text-xs:   0.75rem;    /* 12px - Minimum, Captions, Badges, Nav-Labels */
   --text-sm:   0.8125rem;  /* 13px - Small/Secondary */
-  --text-base: 0.875rem;   /* 14px - Body (Desktop), kompakter */
+  --text-base: 0.9375rem;  /* 15px - Body (Desktop) */
   --text-md:   1rem;       /* 16px - Body (Mobile), Inputs */
   --text-lg:   1.125rem;   /* 18px - Section-Title */
   --text-xl:   1.25rem;    /* 20px - Subtitle */

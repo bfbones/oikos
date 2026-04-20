@@ -759,7 +759,8 @@
   cursor: pointer;
   transition:
     transform var(--transition-fast),
-    box-shadow var(--transition-fast);
+    box-shadow var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
 .card--interactive:hover {
@@ -768,7 +769,9 @@
 }
 
 .card--interactive:active {
-  transform: scale(0.99);
+  transform: scale(0.98);
+  background-color: var(--color-surface-3);
+  box-shadow: var(--shadow-sm);
 }
 
 .card--interactive:focus-visible {
