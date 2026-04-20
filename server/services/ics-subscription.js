@@ -133,7 +133,8 @@ async function syncOne(sub) {
         start_datetime = excluded.start_datetime,
         end_datetime   = excluded.end_datetime,
         all_day        = excluded.all_day,
-        location       = excluded.location
+        location       = excluded.location,
+        color          = excluded.color
       WHERE user_modified = 0
     `);
 
@@ -164,7 +165,10 @@ async function sync(subscriptionId) {
   const subs = subscriptionId
     ? db.get().prepare('SELECT * FROM ics_subscriptions WHERE id = ?').all(subscriptionId)
     : db.get().prepare('SELECT * FROM ics_subscriptions').all();
-  for (const sub of subs) await syncOne(sub);
+  for (const sub of subs) {
+    try { await syncOne(sub); }
+    catch (err) { log.error(`Sync Abonnement ${sub.id} fehlgeschlagen: ${err.message}`); }
+  }
 }
 
 function getAll(userId) {
