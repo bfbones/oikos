@@ -27,7 +27,7 @@ const DAY_NAMES = () => [
   t('meals.dayFr'), t('meals.daySa'), t('meals.daySo'),
 ];
 
-const EXCLUDED_MEAL_CATEGORY_NAMES = new Set(['Haushalt', 'Drogerie', 'Sonstiges']);
+const EXCLUDED_MEAL_CATEGORY_NAMES = new Set(['Haushalt', 'Drogerie']);
 
 // --------------------------------------------------------
 // State
