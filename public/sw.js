@@ -4,17 +4,19 @@
  * Abhängigkeiten: keine
  *
  * Caching-Strategien:
- *   APP_SHELL (HTML + kritische JS/CSS): Stale-While-Revalidate
- *     → Sofortiger Render aus Cache, Update im Hintergrund
- *   PAGE_MODULES (Seiten-JS): Stale-While-Revalidate
- *     → Navigation bleibt schnell, neue Module werden im Hintergrund geladen
- *   ASSETS (Bilder, Icons): Cache-First, 30-Tage-TTL
+ *   APP_SHELL (HTML + kritische JS/CSS): Cache-First (frisch vorgeladen via install)
+ *   PAGE_MODULES (Seiten-JS): Cache-First (frisch vorgeladen via install)
+ *   ASSETS (Bilder, Icons): Cache-First, lazily gecacht, bei SW-Update geleert
  *   API: Immer Netzwerk (kein Caching von Nutzerdaten)
+ *
+ * Nach SW-Update: alle Requests gehen einmalig cache-bypassed ans Netz
+ *   → bypassCacheUntil (in-memory + Cache API für SW-Restart-Robustheit)
  */
 
-const SHELL_CACHE   = 'oikos-shell-v35';
-const PAGES_CACHE   = 'oikos-pages-v30';
-const ASSETS_CACHE  = 'oikos-assets-v27';
+const SHELL_CACHE   = 'oikos-shell-v50';
+const PAGES_CACHE   = 'oikos-pages-v45';
+const ASSETS_CACHE  = 'oikos-assets-v45';
+const BYPASS_CACHE  = 'oikos-bypass-flag';
 const ALL_CACHES    = [SHELL_CACHE, PAGES_CACHE, ASSETS_CACHE];
 
 // App-Shell: sofort benötigt für ersten Render
@@ -79,21 +81,47 @@ const PAGE_MODULES = [
 ];
 
 // --------------------------------------------------------
+// Bypass-Flag: nach SW-Update einmalig alles frisch vom Netz laden.
+// In-Memory-Variable (schnell) + Cache API (SW-Restart-sicher).
+// --------------------------------------------------------
+let bypassCacheUntil = 0;
+
+// Beim SW-Prozess-Start: Flag aus Cache API wiederherstellen.
+// Nötig falls Chrome den SW zwischen activate und erstem Fetch terminiert hat.
+let _bypassInitDone = false;
+const _bypassInit = (async () => {
+  try {
+    const c = await caches.open(BYPASS_CACHE);
+    const r = await c.match('/active');
+    if (r) {
+      const until = parseInt(r.headers.get('x-until') || '0');
+      if (Date.now() < until) {
+        bypassCacheUntil = until;
+      } else {
+        await c.delete('/active'); // abgelaufen, aufräumen
+      }
+    }
+  } catch { /* Fehler ignorieren */ }
+  _bypassInitDone = true;
+})();
+
+// --------------------------------------------------------
 // Install: App-Shell + Seiten-Module vorab cachen
+// cache: 'reload' umgeht den HTTP-Cache → immer frische Dateien
 // --------------------------------------------------------
 self.addEventListener('install', (event) => {
+  const freshShell   = APP_SHELL.map((url)    => new Request(url, { cache: 'reload' }));
+  const freshModules = PAGE_MODULES.map((url) => new Request(url, { cache: 'reload' }));
   event.waitUntil(
     Promise.all([
-      caches.open(SHELL_CACHE).then((c)  => c.addAll(APP_SHELL)),
-      caches.open(PAGES_CACHE).then((c)  => c.addAll(PAGE_MODULES)),
-    ])
+      caches.open(SHELL_CACHE).then((c) => c.addAll(freshShell)),
+      caches.open(PAGES_CACHE).then((c) => c.addAll(freshModules)),
+    ]).then(() => self.skipWaiting())
   );
-  // Sofort aktivieren ohne auf bestehende Clients zu warten
-  self.skipWaiting();
 });
 
 // --------------------------------------------------------
-// Activate: Alte Cache-Versionen löschen + Clients informieren
+// Activate: Alte Cache-Versionen löschen + Bypass setzen + Clients informieren
 // --------------------------------------------------------
 self.addEventListener('activate', (event) => {
   event.waitUntil(
@@ -103,9 +131,26 @@ self.addEventListener('activate', (event) => {
           .filter((key) => !ALL_CACHES.includes(key))
           .map((key) => caches.delete(key))
       )
-    ).then(() => {
+    )
+    // Assets-Cache leeren: lazily gecachte Bilder/Icons werden sonst nie erneuert.
+    .then(() => caches.delete(ASSETS_CACHE))
+    .then(async () => {
+      // Bypass-Fenster setzen: nach SW-Update lädt die nächste Seite alles frisch.
+      // KEIN künstliches waitUntil-Delay hier — Chrome würde clients.claim()
+      // / controllerchange erst nach Ablauf der waitUntil-Promise feuern,
+      // was dazu führt dass bypassCacheUntil gerade abläuft wenn der Reload kommt.
+      const bypassUntil = Date.now() + 30000;
+      bypassCacheUntil = bypassUntil;
+
+      // Cache API: überlebt SW-Prozess-Terminierung zwischen activate und Reload
+      try {
+        const c = await caches.open(BYPASS_CACHE);
+        await c.put('/active', new Response('1', {
+          headers: { 'x-until': String(bypassUntil) },
+        }));
+      } catch { /* Fehler ignorieren */ }
+
       self.clients.claim();
-      // Alle offenen Tabs über das Update informieren
       self.clients.matchAll({ type: 'window' }).then((clients) => {
         clients.forEach((client) => client.postMessage({ type: 'SW_UPDATED' }));
       });
@@ -120,39 +165,59 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // API: immer Netzwerk - niemals Nutzerdaten cachen
   if (url.pathname.startsWith('/api/')) return;
-
-  // Nur GET cachen
   if (request.method !== 'GET') return;
 
-  // Navigation Requests: Network-first, Fallback auf gecachte Shell
-  if (request.mode === 'navigate') {
-    event.respondWith(networkFirst(request, SHELL_CACHE));
+  // Erste Fetch-Events nach SW-Start: auf Cache-API-Initialisierung warten,
+  // damit bypassCacheUntil korrekt gesetzt ist bevor wir entscheiden.
+  if (!_bypassInitDone) {
+    event.respondWith(
+      _bypassInit.then(() => dispatchFetch(request, url))
+    );
     return;
   }
 
-  // Bilder + Fonts: Cache-First, langer TTL - nur Same-Origin
-  // Cross-Origin-Assets (z.B. Wetter-Icons von openweathermap.org) nicht
-  // abfangen: opaque Responses führen im PWA-Modus zu Darstellungsfehlern.
-  if (isAsset(url.pathname) && url.origin === self.location.origin) {
-    event.respondWith(cacheFirst(request, ASSETS_CACHE));
-    return;
-  }
-
-  // Seiten-Module (/pages/*.js): Stale-While-Revalidate
-  if (url.pathname.startsWith('/pages/')) {
-    event.respondWith(staleWhileRevalidate(request, PAGES_CACHE));
-    return;
-  }
-
-  // App-Shell (JS, CSS): Stale-While-Revalidate
-  event.respondWith(staleWhileRevalidate(request, SHELL_CACHE));
+  event.respondWith(dispatchFetch(request, url));
 });
+
+function dispatchFetch(request, url) {
+  // Nach SW-Update: direkt vom Netz, kein SW-Cache, kein HTTP-Cache.
+  // Gilt für ALLE Requests (JS, CSS, Images, HTML) im Bypass-Fenster.
+  if (Date.now() < bypassCacheUntil) {
+    return fetch(new Request(request, { cache: 'no-cache' })).catch(async () => {
+      const cached = await caches.match(request)
+        || await caches.match('/index.html')
+        || await caches.match('/offline.html');
+      return cached || new Response('Offline', {
+        status: 503,
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+      });
+    });
+  }
+
+  // Bypass abgelaufen: Cache API Flag aufräumen (lazy, beim ersten Request danach)
+  if (bypassCacheUntil !== 0) {
+    bypassCacheUntil = 0;
+    caches.open(BYPASS_CACHE).then(c => c.delete('/active')).catch(() => {});
+  }
+
+  if (request.mode === 'navigate') {
+    return networkFirst(request, SHELL_CACHE);
+  }
+
+  if (isAsset(url.pathname) && url.origin === self.location.origin) {
+    return cacheFirst(request, ASSETS_CACHE);
+  }
+
+  if (url.pathname.startsWith('/pages/')) {
+    return cacheFirst(request, PAGES_CACHE);
+  }
+
+  return cacheFirst(request, SHELL_CACHE);
+}
 
 // --------------------------------------------------------
 // Strategie: Network-First (für Navigation Requests)
-// Versucht Netzwerk, fällt auf gecachte Shell zurück (Offline).
 // --------------------------------------------------------
 async function networkFirst(request, cacheName) {
   const cache = await caches.open(cacheName);
@@ -164,15 +229,12 @@ async function networkFirst(request, cacheName) {
     }
     return response;
   } catch {
-    // Offline: gecachte Shell liefern
     const cached = await cache.match(request);
     if (cached) return cached;
 
-    // Fallback auf index.html (SPA-Routing)
     const shell = await cache.match('/index.html');
     if (shell) return shell;
 
-    // Letzter Ausweg: Offline-Seite
     const offline = await caches.match('/offline.html');
     if (offline) return offline;
 
@@ -184,47 +246,7 @@ async function networkFirst(request, cacheName) {
 }
 
 // --------------------------------------------------------
-// Strategie: Stale-While-Revalidate
-// Liefert sofort aus Cache, aktualisiert im Hintergrund.
-// Fallback auf Netzwerk wenn nicht gecacht; Fallback auf
-// index.html für Navigations-Requests (Offline-SPA).
-// --------------------------------------------------------
-async function staleWhileRevalidate(request, cacheName) {
-  const cache    = await caches.open(cacheName);
-  const cached   = await cache.match(request);
-
-  // Netzwerk-Request im Hintergrund starten
-  const networkPromise = fetch(request).then((response) => {
-    if (response.ok && response.type === 'basic') {
-      cache.put(request, response.clone());
-    }
-    return response;
-  }).catch(() => null);
-
-  if (cached) {
-    // Hintergrund-Update läuft, Cache-Version sofort zurückgeben
-    networkPromise; // fire-and-forget
-    return cached;
-  }
-
-  // Nicht im Cache → auf Netzwerk warten
-  const networkResponse = await networkPromise;
-  if (networkResponse) return networkResponse;
-
-  // Offline-Fallback für Navigation
-  if (request.mode === 'navigate') {
-    const shell = await caches.match('/index.html');
-    if (shell) return shell;
-    const offline = await caches.match('/offline.html');
-    if (offline) return offline;
-  }
-
-  // Letzter Ausweg: leere 503-Antwort statt Promise-Rejection
-  return new Response('Service unavailable', { status: 503 });
-}
-
-// --------------------------------------------------------
-// Strategie: Cache-First mit TTL (für Bilder/Fonts)
+// Strategie: Cache-First (für Shell, Pages, Assets)
 // --------------------------------------------------------
 async function cacheFirst(request, cacheName) {
   const cache  = await caches.open(cacheName);
