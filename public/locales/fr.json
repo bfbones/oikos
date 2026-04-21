@@ -56,8 +56,8 @@
     "todayMeals": "Repas du jour",
     "allLink": "Tout",
     "weekLink": "Semaine",
-    "urgentTasksChip": "{{count}} tâche urgente",
-    "urgentTasksChipPlural": "{{count}} tâches urgentes",
+    "urgentTasksChip": "{{count}} tâche à échéance proche",
+    "urgentTasksChipPlural": "{{count}} tâches à échéance proche",
     "eventsChip": "{{count}} événement aujourd'hui",
     "eventsChipPlural": "{{count}} événements aujourd'hui",
     "todayMealChip": "Aujourd'hui : {{title}}",
@@ -76,6 +76,7 @@
     "fabNote": "Note",
     "overdue": "En retard",
     "dueSoon": "À rendre aujourd'hui",
+    "dueToday": "À rendre aujourd'hui",
     "dueTomorrow": "À rendre demain",
     "allDay": "Toute la journée",
     "shoppingMore": "+{{count}} de plus",
@@ -85,7 +86,9 @@
     "customizeReset": "Réinitialiser",
     "customizeSaved": "Tableau de bord sauvegardé",
     "customizeMoveUp": "Monter",
-    "customizeMoveDown": "Descendre"
+    "customizeMoveDown": "Descendre",
+    "overdueTasksChip": "{{count}} tâche en retard",
+    "overdueTasksChipPlural": "{{count}} tâches en retard"
   },
   "tasks": {
     "title": "Tâches",

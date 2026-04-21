@@ -56,8 +56,8 @@
     "todayMeals": "Питание сегодня",
     "allLink": "Все",
     "weekLink": "Неделя",
-    "urgentTasksChip": "{{count}} срочная задача",
-    "urgentTasksChipPlural": "{{count}} срочных задач",
+    "urgentTasksChip": "{{count}} задача скоро истекает",
+    "urgentTasksChipPlural": "{{count}} задач скоро истекает",
     "eventsChip": "{{count}} событие сегодня",
     "eventsChipPlural": "{{count}} событий сегодня",
     "todayMealChip": "Сегодня: {{title}}",
@@ -76,6 +76,7 @@
     "fabNote": "Заметка",
     "overdue": "Просрочено",
     "dueSoon": "Сегодня",
+    "dueToday": "Сегодня",
     "dueTomorrow": "Завтра",
     "allDay": "Весь день",
     "shoppingMore": "+{{count}} ещё",
@@ -85,7 +86,9 @@
     "customizeReset": "Сбросить",
     "customizeSaved": "Панель сохранена",
     "customizeMoveUp": "Вверх",
-    "customizeMoveDown": "Вниз"
+    "customizeMoveDown": "Вниз",
+    "overdueTasksChip": "{{count}} просроченная задача",
+    "overdueTasksChipPlural": "{{count}} просроченных задач"
   },
   "tasks": {
     "title": "Задачи",

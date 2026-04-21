@@ -56,8 +56,8 @@
     "todayMeals": "Γεύματα σήμερα",
     "allLink": "Όλα",
     "weekLink": "Εβδομάδα",
-    "urgentTasksChip": "{{count}} επείγουσα εργασία",
-    "urgentTasksChipPlural": "{{count}} επείγουσες εργασίες",
+    "urgentTasksChip": "{{count}} εργασία λήγει σύντομα",
+    "urgentTasksChipPlural": "{{count}} εργασίες λήγουν σύντομα",
     "eventsChip": "{{count}} εκδήλωση σήμερα",
     "eventsChipPlural": "{{count}} εκδηλώσεις σήμερα",
     "todayMealChip": "Σήμερα: {{title}}",
@@ -76,6 +76,7 @@
     "fabNote": "Σημείωση",
     "overdue": "Εκπρόθεσμο",
     "dueSoon": "Λήγει σήμερα",
+    "dueToday": "Λήγει σήμερα",
     "dueTomorrow": "Λήγει αύριο",
     "allDay": "Όλη μέρα",
     "shoppingMore": "+{{count}} ακόμα",
@@ -85,7 +86,9 @@
     "customizeReset": "Επαναφορά",
     "customizeSaved": "Πίνακας αποθηκεύτηκε",
     "customizeMoveUp": "Πάνω",
-    "customizeMoveDown": "Κάτω"
+    "customizeMoveDown": "Κάτω",
+    "overdueTasksChip": "{{count}} εκπρόθεσμη εργασία",
+    "overdueTasksChipPlural": "{{count}} εκπρόθεσμες εργασίες"
   },
   "tasks": {
     "title": "Εργασίες",

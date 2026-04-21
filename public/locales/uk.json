@@ -56,8 +56,8 @@
     "todayMeals": "Страви на сьогодні",
     "allLink": "Усі",
     "weekLink": "Тиждень",
-    "urgentTasksChip": "{{count}} термінове завдання",
-    "urgentTasksChipPlural": "{{count}} термінових завдань",
+    "urgentTasksChip": "{{count}} завдання скоро прострочено",
+    "urgentTasksChipPlural": "{{count}} завдань скоро прострочено",
     "eventsChip": "{{count}} подія сьогодні",
     "eventsChipPlural": "{{count}} подій сьогодні",
     "todayMealChip": "Сьогодні: {{title}}",
@@ -76,6 +76,7 @@
     "fabNote": "Нотатка",
     "overdue": "Прострочено",
     "dueSoon": "Сьогодні",
+    "dueToday": "Сьогодні",
     "dueTomorrow": "Завтра",
     "allDay": "Весь день",
     "shoppingMore": "+{{count}} ще",
@@ -85,7 +86,9 @@
     "customizeReset": "Скинути",
     "customizeSaved": "Огляд збережено",
     "customizeMoveUp": "Перемістити вгору",
-    "customizeMoveDown": "Перемістити вниз"
+    "customizeMoveDown": "Перемістити вниз",
+    "overdueTasksChip": "{{count}} прострочене завдання",
+    "overdueTasksChipPlural": "{{count}} прострочених завдань"
   },
   "tasks": {
     "title": "Завдання",

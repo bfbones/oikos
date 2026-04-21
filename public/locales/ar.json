@@ -56,8 +56,8 @@
     "todayMeals": "وجبات اليوم",
     "allLink": "الكل",
     "weekLink": "هذا الأسبوع",
-    "urgentTasksChip": "{{count}} مهمة عاجلة",
-    "urgentTasksChipPlural": "{{count}} مهام عاجلة",
+    "urgentTasksChip": "{{count}} مهمة ستنتهي قريباً",
+    "urgentTasksChipPlural": "{{count}} مهام ستنتهي قريباً",
     "eventsChip": "{{count}} حدث اليوم",
     "eventsChipPlural": "{{count}} أحداث اليوم",
     "todayMealChip": "اليوم: {{title}}",
@@ -76,6 +76,7 @@
     "fabNote": "ملاحظة",
     "overdue": "متأخر",
     "dueSoon": "يستحق اليوم",
+    "dueToday": "يستحق اليوم",
     "dueTomorrow": "يستحق غداً",
     "allDay": "طوال اليوم",
     "shoppingMore": "+{{count}} أخرى",
@@ -85,7 +86,9 @@
     "customizeReset": "الافتراضي",
     "customizeSaved": "تم حفظ لوحة التحكم",
     "customizeMoveUp": "للأعلى",
-    "customizeMoveDown": "للأسفل"
+    "customizeMoveDown": "للأسفل",
+    "overdueTasksChip": "{{count}} مهمة متأخرة",
+    "overdueTasksChipPlural": "{{count}} مهام متأخرة"
   },
   "tasks": {
     "title": "المهام",

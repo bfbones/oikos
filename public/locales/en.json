@@ -56,8 +56,8 @@
     "todayMeals": "Today's meals",
     "allLink": "All",
     "weekLink": "Week",
-    "urgentTasksChip": "{{count}} urgent task",
-    "urgentTasksChipPlural": "{{count}} urgent tasks",
+    "urgentTasksChip": "{{count}} task due soon",
+    "urgentTasksChipPlural": "{{count}} tasks due soon",
     "eventsChip": "{{count}} event today",
     "eventsChipPlural": "{{count}} events today",
     "todayMealChip": "Today: {{title}}",
@@ -76,6 +76,7 @@
     "fabNote": "Note",
     "overdue": "Overdue",
     "dueSoon": "Due today",
+    "dueToday": "Due today",
     "dueTomorrow": "Due tomorrow",
     "allDay": "All day",
     "shoppingMore": "+{{count}} more",
@@ -85,7 +86,9 @@
     "customizeReset": "Reset",
     "customizeSaved": "Dashboard saved",
     "customizeMoveUp": "Move up",
-    "customizeMoveDown": "Move down"
+    "customizeMoveDown": "Move down",
+    "overdueTasksChip": "{{count}} overdue task",
+    "overdueTasksChipPlural": "{{count}} overdue tasks"
   },
   "tasks": {
     "title": "Tasks",

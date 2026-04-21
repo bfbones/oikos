@@ -56,8 +56,8 @@
     "todayMeals": "आज का भोजन",
     "allLink": "सभी",
     "weekLink": "इस सप्ताह",
-    "urgentTasksChip": "{{count}} अत्यावश्यक कार्य",
-    "urgentTasksChipPlural": "{{count}} अत्यावश्यक कार्य",
+    "urgentTasksChip": "{{count}} कार्य जल्द समाप्त",
+    "urgentTasksChipPlural": "{{count}} कार्य जल्द समाप्त",
     "eventsChip": "आज {{count}} कार्यक्रम",
     "eventsChipPlural": "आज {{count}} कार्यक्रम",
     "todayMealChip": "आज: {{title}}",
@@ -76,6 +76,7 @@
     "fabNote": "नोट",
     "overdue": "अतिदेय",
     "dueSoon": "आज देय है",
+    "dueToday": "आज देय है",
     "dueTomorrow": "कल देय है",
     "allDay": "पूरे दिन",
     "shoppingMore": "+{{count}} और",
@@ -85,7 +86,9 @@
     "customizeReset": "डिफ़ॉल्ट",
     "customizeSaved": "डैशबोर्ड सहेजा गया",
     "customizeMoveUp": "ऊपर ले जाएं",
-    "customizeMoveDown": "नीचे ले जाएं"
+    "customizeMoveDown": "नीचे ले जाएं",
+    "overdueTasksChip": "{{count}} विलंबित कार्य",
+    "overdueTasksChipPlural": "{{count}} विलंबित कार्य"
   },
   "tasks": {
     "title": "कार्य",

@@ -56,8 +56,8 @@
     "todayMeals": "今日饮食",
     "allLink": "全部",
     "weekLink": "本周",
-    "urgentTasksChip": "{{count}} 个紧急任务",
-    "urgentTasksChipPlural": "{{count}} 个紧急任务",
+    "urgentTasksChip": "{{count}} 个即将到期任务",
+    "urgentTasksChipPlural": "{{count}} 个即将到期任务",
     "eventsChip": "今天 {{count}} 个日程",
     "eventsChipPlural": "今天 {{count}} 个日程",
     "todayMealChip": "今天：{{title}}",
@@ -76,6 +76,7 @@
     "fabNote": "便签",
     "overdue": "已逾期",
     "dueSoon": "今天到期",
+    "dueToday": "今天到期",
     "dueTomorrow": "明天到期",
     "allDay": "全天",
     "shoppingMore": "+{{count}} 更多",
@@ -85,7 +86,9 @@
     "customizeReset": "重置",
     "customizeSaved": "仪表板已保存",
     "customizeMoveUp": "上移",
-    "customizeMoveDown": "下移"
+    "customizeMoveDown": "下移",
+    "overdueTasksChip": "{{count}} 个逾期任务",
+    "overdueTasksChipPlural": "{{count}} 个逾期任务"
   },
   "tasks": {
     "title": "任务",

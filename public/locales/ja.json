@@ -56,8 +56,8 @@
     "todayMeals": "今日の食事",
     "allLink": "すべて",
     "weekLink": "今週",
-    "urgentTasksChip": "緊急タスク {{count}} 件",
-    "urgentTasksChipPlural": "緊急タスク {{count}} 件",
+    "urgentTasksChip": "期限間近のタスク {{count}} 件",
+    "urgentTasksChipPlural": "期限間近のタスク {{count}} 件",
     "eventsChip": "今日の予定 {{count}} 件",
     "eventsChipPlural": "今日の予定 {{count}} 件",
     "todayMealChip": "今日：{{title}}",
@@ -76,6 +76,7 @@
     "fabNote": "メモ",
     "overdue": "期限切れ",
     "dueSoon": "今日が期限",
+    "dueToday": "今日が期限",
     "dueTomorrow": "明日が期限",
     "allDay": "終日",
     "shoppingMore": "+{{count}} 件",
@@ -85,7 +86,9 @@
     "customizeReset": "デフォルト",
     "customizeSaved": "ダッシュボードを保存しました",
     "customizeMoveUp": "上へ",
-    "customizeMoveDown": "下へ"
+    "customizeMoveDown": "下へ",
+    "overdueTasksChip": "期限超過のタスク {{count}} 件",
+    "overdueTasksChipPlural": "期限超過のタスク {{count}} 件"
   },
   "tasks": {
     "title": "タスク",

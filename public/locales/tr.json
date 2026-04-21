@@ -56,8 +56,8 @@
     "todayMeals": "Bugünün yemekleri",
     "allLink": "Tümü",
     "weekLink": "Hafta",
-    "urgentTasksChip": "{{count}} acil görev",
-    "urgentTasksChipPlural": "{{count}} acil görev",
+    "urgentTasksChip": "{{count}} görev yakında bitiyor",
+    "urgentTasksChipPlural": "{{count}} görev yakında bitiyor",
     "eventsChip": "Bugün {{count}} etkinlik",
     "eventsChipPlural": "Bugün {{count}} etkinlik",
     "todayMealChip": "Bugün: {{title}}",
@@ -76,6 +76,7 @@
     "fabNote": "Not",
     "overdue": "Gecikmiş",
     "dueSoon": "Bugün bitiyor",
+    "dueToday": "Bugün bitiyor",
     "dueTomorrow": "Yarın bitiyor",
     "allDay": "Tüm gün",
     "shoppingMore": "+{{count}} daha",
@@ -85,7 +86,9 @@
     "customizeReset": "Sıfırla",
     "customizeSaved": "Pano kaydedildi",
     "customizeMoveUp": "Yukarı",
-    "customizeMoveDown": "Aşağı"
+    "customizeMoveDown": "Aşağı",
+    "overdueTasksChip": "{{count}} gecikmiş görev",
+    "overdueTasksChipPlural": "{{count}} gecikmiş görev"
   },
   "tasks": {
     "title": "Görevler",

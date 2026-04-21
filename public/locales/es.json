@@ -56,8 +56,8 @@
     "todayMeals": "Comidas de hoy",
     "allLink": "Todo",
     "weekLink": "Semana",
-    "urgentTasksChip": "{{count}} tarea urgente",
-    "urgentTasksChipPlural": "{{count}} tareas urgentes",
+    "urgentTasksChip": "{{count}} tarea por vencer",
+    "urgentTasksChipPlural": "{{count}} tareas por vencer",
     "eventsChip": "{{count}} evento hoy",
     "eventsChipPlural": "{{count}} eventos hoy",
     "todayMealChip": "Hoy: {{title}}",
@@ -76,6 +76,7 @@
     "fabNote": "Nota",
     "overdue": "Vencida",
     "dueSoon": "Vence hoy",
+    "dueToday": "Vence hoy",
     "dueTomorrow": "Vence mañana",
     "allDay": "Todo el día",
     "shoppingMore": "+{{count}} más",
@@ -85,7 +86,9 @@
     "customizeReset": "Restablecer",
     "customizeSaved": "Panel guardado",
     "customizeMoveUp": "Subir",
-    "customizeMoveDown": "Bajar"
+    "customizeMoveDown": "Bajar",
+    "overdueTasksChip": "{{count}} tarea vencida",
+    "overdueTasksChipPlural": "{{count}} tareas vencidas"
   },
   "tasks": {
     "title": "Tareas",

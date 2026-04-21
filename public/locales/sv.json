@@ -56,8 +56,8 @@
     "todayMeals": "Dagens måltider",
     "allLink": "Alla",
     "weekLink": "Vecka",
-    "urgentTasksChip": "{{count}} brådskande uppgift",
-    "urgentTasksChipPlural": "{{count}} brådskande uppgifter",
+    "urgentTasksChip": "{{count}} uppgift snart förfallen",
+    "urgentTasksChipPlural": "{{count}} uppgifter snart förfallna",
     "eventsChip": "{{count}} händelse idag",
     "eventsChipPlural": "{{count}} evenemang idag",
     "todayMealChip": "Idag: {{title}}",
@@ -76,6 +76,7 @@
     "fabNote": "Anteckning",
     "overdue": "Försenad",
     "dueSoon": "Förfaller idag",
+    "dueToday": "Förfaller idag",
     "dueTomorrow": "Förfaller imorgon",
     "allDay": "Hela dagen",
     "shoppingMore": "+{{count}} till",
@@ -85,7 +86,9 @@
     "customizeReset": "Återställ",
     "customizeSaved": "Instrumentpanel sparad",
     "customizeMoveUp": "Flytta upp",
-    "customizeMoveDown": "Flytta ner"
+    "customizeMoveDown": "Flytta ner",
+    "overdueTasksChip": "{{count}} förfallen uppgift",
+    "overdueTasksChipPlural": "{{count}} förfallna uppgifter"
   },
   "tasks": {
     "title": "Uppgifter",

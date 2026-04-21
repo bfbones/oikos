@@ -56,8 +56,8 @@
     "todayMeals": "Pasti di oggi",
     "allLink": "Tutto",
     "weekLink": "Settimana",
-    "urgentTasksChip": "{{count}} compito urgente",
-    "urgentTasksChipPlural": "{{count}} compiti urgenti",
+    "urgentTasksChip": "{{count}} compito in scadenza",
+    "urgentTasksChipPlural": "{{count}} compiti in scadenza",
     "eventsChip": "{{count}} evento oggi",
     "eventsChipPlural": "{{count}} eventi oggi",
     "todayMealChip": "Oggi: {{title}}",
@@ -76,6 +76,7 @@
     "fabNote": "Nota",
     "overdue": "Scaduto",
     "dueSoon": "Scade oggi",
+    "dueToday": "Scade oggi",
     "dueTomorrow": "Scade domani",
     "allDay": "Tutto il giorno",
     "shoppingMore": "+{{count}} altri",
@@ -85,7 +86,9 @@
     "customizeReset": "Ripristina",
     "customizeSaved": "Dashboard salvata",
     "customizeMoveUp": "Su",
-    "customizeMoveDown": "Giù"
+    "customizeMoveDown": "Giù",
+    "overdueTasksChip": "{{count}} compito scaduto",
+    "overdueTasksChipPlural": "{{count}} compiti scaduti"
   },
   "tasks": {
     "title": "Compiti",
