@@ -1,3 +1,34 @@
+## Quick Install
+
+Two ways to get Oikos running from scratch:
+
+### Option A — CLI Installer (Linux / macOS)
+
+```bash
+git clone https://github.com/ulsklyc/oikos.git && cd oikos
+bash install.sh
+```
+
+The script checks prerequisites, generates security keys, configures optional integrations, starts Docker, and creates your admin account.
+
+Non-interactive mode (CI/provisioning — provide your own `.env`):
+
+```bash
+bash install.sh --env-file /path/to/.env
+```
+
+### Option B — Web Installer (all platforms with Node.js)
+
+```bash
+git clone https://github.com/ulsklyc/oikos.git && cd oikos
+node tools/installer/install-server.js
+# Open http://localhost:8090
+```
+
+Requires Node.js 18+ on the host. Docker still runs the app itself.
+
+---
+
 # Installation Guide
 
 Complete setup instructions for Oikos - from Docker installation to your first login.

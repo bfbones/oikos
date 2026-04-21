@@ -28,6 +28,10 @@ scripts/
 # Markdown files (README, CHANGELOG, etc.)
 *.md
 
+# Installer tools (not part of the running app)
+tools/
+install.sh
+
 # IDE & OS
 .vscode/
 .idea/
