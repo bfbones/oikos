@@ -475,6 +475,15 @@ const MIGRATIONS = [
         WHERE subscription_id IS NOT NULL;
     `,
   },
+  {
+    version: 12,
+    description: 'calendar_events: partiellen Unique-Index durch vollständigen ersetzen (ON CONFLICT support)',
+    up: `
+      DROP INDEX IF EXISTS idx_calendar_sub_extid;
+      CREATE UNIQUE INDEX idx_calendar_sub_extid
+        ON calendar_events (subscription_id, external_calendar_id);
+    `,
+  },
 ];
 
 /**

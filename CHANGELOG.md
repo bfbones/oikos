@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.21.1] - 2026-04-21
+
+### Fixed
+- ICS calendar subscription sync no longer fails with "ON CONFLICT clause does not match any PRIMARY KEY or UNIQUE constraint". Migration 12 replaces the partial unique index on `(subscription_id, external_calendar_id)` with a full unique index, which SQLite's upsert conflict-target syntax requires.
+
 ## [0.21.0] - 2026-04-21
 
 ### Added
