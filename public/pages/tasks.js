@@ -24,6 +24,8 @@ const PRIORITIES = () => [
   { value: 'none',   label: t('tasks.priorityNone'),   color: 'var(--color-priority-none)'   },
 ];
 
+const PRIO_ORDER = { urgent: 0, high: 1, medium: 2, low: 3, none: 4 };
+
 const STATUSES = () => [
   { value: 'open',        label: t('tasks.statusOpen')       },
   { value: 'in_progress', label: t('tasks.statusInProgress') },
@@ -228,6 +230,28 @@ function renderTaskCard(task, opts = {}) {
     </div>`;
 }
 
+// Effektive Fälligkeit: mit due_time wenn vorhanden, sonst 23:59:59 des Tages
+function effectiveDue(task) {
+  if (!task.due_date) return null;
+  return task.due_time
+    ? new Date(`${task.due_date}T${task.due_time}`)
+    : new Date(`${task.due_date}T23:59:59`);
+}
+
+// Einheitliche Sortierung: überfällig zuerst → Datum/Zeit ASC → Prio als Tiebreaker
+function sortTasks(a, b, now) {
+  const aDate = effectiveDue(a);
+  const bDate = effectiveDue(b);
+  const aOver = aDate && aDate < now ? 1 : 0;
+  const bOver = bDate && bDate < now ? 1 : 0;
+  if (bOver !== aOver) return bOver - aOver;
+  if (!aDate && !bDate) return (PRIO_ORDER[a.priority] ?? 4) - (PRIO_ORDER[b.priority] ?? 4);
+  if (!aDate) return 1;
+  if (!bDate) return -1;
+  if (aDate.getTime() !== bDate.getTime()) return aDate < bDate ? -1 : 1;
+  return (PRIO_ORDER[a.priority] ?? 4) - (PRIO_ORDER[b.priority] ?? 4);
+}
+
 function renderTaskGroups(tasks, groupMode) {
   if (!tasks.length) {
     return `<div class="empty-state">
@@ -240,16 +264,20 @@ function renderTaskGroups(tasks, groupMode) {
     </div>`;
   }
 
-  const groups = groupBy(tasks, groupMode);
+  const now = new Date();
   const catLabelsMap = CATEGORY_LABELS();
-  return groups.map(([name, groupTasks]) => `
+  const groups = groupBy(tasks, groupMode);
+  return groups.map(([name, groupTasks]) => {
+    const sorted = [...groupTasks].sort((a, b) => sortTasks(a, b, now));
+    return `
     <div class="task-group">
       <div class="task-group__header">
         <span class="task-group__title">${catLabelsMap[name] ?? name}</span>
         <span class="task-group__count">${groupTasks.length}</span>
       </div>
-      ${groupTasks.map((t) => renderSwipeRow(t, renderTaskCard(t))).join('')}
-    </div>`).join('');
+      ${sorted.map((t) => renderSwipeRow(t, renderTaskCard(t))).join('')}
+    </div>`;
+  }).join('');
 }
 
 // --------------------------------------------------------
@@ -636,6 +664,11 @@ function renderKanban(container) {
   for (const t of state.tasks) {
     if (grouped[t.status]) grouped[t.status].push(t);
     else grouped['open'].push(t);
+  }
+
+  const now = new Date();
+  for (const col of cols) {
+    grouped[col.status].sort((a, b) => sortTasks(a, b, now));
   }
 
   listEl.innerHTML = `
